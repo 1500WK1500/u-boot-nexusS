@@ -200,14 +200,10 @@
 #define CONFIG_SYS_MEMTEST_END		(CONFIG_SYS_SDRAM_BASE + 0x5000000)
 #define CONFIG_SYS_LOAD_ADDR		(CONFIG_SYS_SDRAM_BASE + 0x4000000)
 
-/* Goni has 3 banks of DRAM, but swap the bank */
-#define CONFIG_NR_DRAM_BANKS	3
-#define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE	/* OneDRAM Bank #0 */
-#define PHYS_SDRAM_1_SIZE	(80 << 20)		/* 80 MB in Bank #0 */
-#define PHYS_SDRAM_2		0x40000000		/* mDDR DMC1 Bank #1 */
-#define PHYS_SDRAM_2_SIZE	(256 << 20)		/* 256 MB in Bank #1 */
-#define PHYS_SDRAM_3		0x50000000		/* mDDR DMC2 Bank #2 */
-#define PHYS_SDRAM_3_SIZE	(128 << 20)		/* 128 MB in Bank #2 */
+/* NexusS has 1 banks of DRAM */
+#define CONFIG_NR_DRAM_BANKS	1
+#define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE		/* SDRAM Bank #1 */
+#define PHYS_SDRAM_1_SIZE	0x10000000 			/* 256 MB OneDRAM 128MB + mDDR 128MB */
 
 #define CONFIG_SYS_MONITOR_BASE		0x00000000
 #define CONFIG_SYS_MONITOR_LEN		(256 << 10)	/* 256 KiB */
