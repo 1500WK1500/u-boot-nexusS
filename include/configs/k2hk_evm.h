@@ -10,15 +10,15 @@
 #ifndef __CONFIG_K2HK_EVM_H
 #define __CONFIG_K2HK_EVM_H
 
+#include <environment/ti/spi.h>
+
 /* Platform type */
 #define CONFIG_SOC_K2HK
-#define CONFIG_K2HK_EVM
 
 /* U-Boot general configuration */
 #define CONFIG_EXTRA_ENV_KS2_BOARD_SETTINGS				\
 	DEFAULT_FW_INITRAMFS_BOOT_ENV					\
 	"boot=ubi\0"							\
-	"addr_mon=0x0c5f0000\0"						\
 	"args_ubi=setenv bootargs ${bootargs} rootfstype=ubifs "	\
 	"root=ubi0:rootfs rootflags=sync rw ubi.mtd=ubifs,2048\0"	\
 	"name_fdt=keystone-k2hk-evm.dtb\0"				\
@@ -31,6 +31,8 @@
 
 /* SPL SPI Loader Configuration */
 #define CONFIG_SPL_TEXT_BASE		0x0c200000
+
+#define SPI_MTD_PARTS KEYSTONE_SPI0_MTD_PARTS
 
 /* NAND Configuration */
 #define CONFIG_SYS_NAND_PAGE_2K

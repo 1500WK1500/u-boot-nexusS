@@ -17,10 +17,8 @@
  * Include common defines/options for all AMCC eval boards
  */
 #define CONFIG_HOSTNAME		io
-#define CONFIG_IDENT_STRING	" io 0.06"
 #include "amcc-common.h"
 
-#define CONFIG_BOARD_EARLY_INIT_F
 #define CONFIG_BOARD_EARLY_INIT_R
 #define CONFIG_MISC_INIT_R
 #define CONFIG_LAST_STAGE_INIT
@@ -60,7 +58,6 @@
  * Commands additional to the ones defined in amcc-common.h
  */
 #define CONFIG_CMD_DTT
-#undef CONFIG_CMD_DIAG
 #undef CONFIG_CMD_EEPROM
 #undef CONFIG_CMD_IRQ
 

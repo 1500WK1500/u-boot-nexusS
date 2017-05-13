@@ -19,7 +19,6 @@
 #define CONFIG_MPC5200		1	/* This is a MPC5200 CPU */
 #define CONFIG_A4M072		1	/* ... on A4M072 board */
 #define CONFIG_MPC5200_DDR	1	/* ... use DDR RAM */
-#define CONFIG_DISPLAY_BOARDINFO
 
 #define CONFIG_SYS_TEXT_BASE	0xFE000000
 
@@ -33,10 +32,8 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1 */
-#define CONFIG_BAUDRATE		9600	/* ... at 9600 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 /* define to enable silent console */
-#define CONFIG_SILENT_CONSOLE
 #define CONFIG_SYS_DEVICE_NULLDEV	1	/* include nulldev device */
 
 /*
@@ -44,10 +41,8 @@
  * 0x40000000 - 0x4fffffff - PCI Memory
  * 0x50000000 - 0x50ffffff - PCI IO Space
  */
-#define CONFIG_PCI
 
 #if defined(CONFIG_PCI)
-#define CONFIG_PCI_PNP		1
 #define CONFIG_PCI_SCAN_SHOW	1
 #define CONFIG_PCIAUTO_SKIP_HOST_BRIDGE	1
 
@@ -64,13 +59,8 @@
 
 #undef CONFIG_EEPRO100
 
-/* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-
 /* USB */
 #define CONFIG_USB_OHCI_NEW
-#define CONFIG_USB_STORAGE
 #define CONFIG_SYS_OHCI_BE_CONTROLLER
 #undef CONFIG_SYS_USB_OHCI_BOARD_INIT
 #define CONFIG_SYS_USB_OHCI_CPU_INIT	1
@@ -93,7 +83,6 @@
  */
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IDE
-#define CONFIG_CMD_DISPLAY
 
 #if defined(CONFIG_PCI)
 #define CONFIG_CMD_PCI

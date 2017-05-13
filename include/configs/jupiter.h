@@ -15,7 +15,6 @@
 
 #define CONFIG_MPC5200		1	/* This is an MPC5200 CPU */
 #define CONFIG_JUPITER		1	/* ... on Jupiter board */
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Valid values for CONFIG_SYS_TEXT_BASE are:
@@ -29,7 +28,6 @@
 #define CONFIG_SYS_MPC5XXX_CLKIN	33000000 /* ... running at 33.000000MHz */
 
 #define CONFIG_BOARD_EARLY_INIT_R	1
-#define CONFIG_BOARD_EARLY_INIT_F	1
 
 #define CONFIG_HIGH_BATS	1	/* High BATs supported */
 
@@ -37,7 +35,6 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1 */
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 
 /*
@@ -45,10 +42,8 @@
  * 0x40000000 - 0x4fffffff - PCI Memory
  * 0x50000000 - 0x50ffffff - PCI IO Space
  */
-/*#define CONFIG_PCI		*/
 
 #if defined(CONFIG_PCI)
-#define CONFIG_PCI_PNP		1
 #define CONFIG_PCI_SCAN_SHOW	1
 #define CONFIG_PCIAUTO_SKIP_HOST_BRIDGE	1
 
@@ -67,9 +62,6 @@
 #define CONFIG_SYS_RX_ETH_BUFFER	8  /* use 8 rx buffer on eepro100  */
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 #define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
 

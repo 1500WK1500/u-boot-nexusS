@@ -12,13 +12,11 @@
 #ifndef __CONFIG_AM57XX_EVM_H
 #define __CONFIG_AM57XX_EVM_H
 
-#define CONFIG_AM57XX
+#include <environment/ti/dfu.h>
 
 #ifdef CONFIG_SPL_BUILD
 #define CONFIG_IODELAY_RECALIBRATION
 #endif
-
-#define CONFIG_BOARD_EARLY_INIT_F
 
 #define CONFIG_NR_DRAM_BANKS		2
 
@@ -32,20 +30,43 @@
 #define CONFIG_SYS_NS16550_COM1		UART1_BASE	/* Base EVM has UART0 */
 #define CONFIG_SYS_NS16550_COM2		UART2_BASE	/* UART2 */
 #define CONFIG_SYS_NS16550_COM3		UART3_BASE	/* UART3 */
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_SYS_OMAP_ABE_SYSCK
 
 /* Define the default GPT table for eMMC */
 #define PARTS_DEFAULT \
+	/* Linux partitions */ \
 	"uuid_disk=${uuid_gpt_disk};" \
-	"name=rootfs,start=2MiB,size=-,uuid=${uuid_gpt_rootfs}"
+	"name=rootfs,start=2MiB,size=-,uuid=${uuid_gpt_rootfs}\0" \
+	/* Android partitions */ \
+	"partitions_android=" \
+	"uuid_disk=${uuid_gpt_disk};" \
+	"name=xloader,start=128K,size=256K,uuid=${uuid_gpt_xloader};" \
+	"name=bootloader,size=768K,uuid=${uuid_gpt_bootloader};" \
+	"name=environment,size=128K,uuid=${uuid_gpt_environment};" \
+	"name=misc,size=128K,uuid=${uuid_gpt_misc};" \
+	"name=reserved,size=256K,uuid=${uuid_gpt_reserved};" \
+	"name=efs,size=16M,uuid=${uuid_gpt_efs};" \
+	"name=crypto,size=16K,uuid=${uuid_gpt_crypto};" \
+	"name=recovery,size=10M,uuid=${uuid_gpt_recovery};" \
+	"name=boot,size=10M,uuid=${uuid_gpt_boot};" \
+	"name=system,size=768M,uuid=${uuid_gpt_system};" \
+	"name=cache,size=256M,uuid=${uuid_gpt_cache};" \
+	"name=ipu1,size=1M,uuid=${uuid_gpt_ipu1};" \
+	"name=ipu2,size=1M,uuid=${uuid_gpt_ipu2};" \
+	"name=userdata,size=-,uuid=${uuid_gpt_userdata}"
+
+#define DFUARGS \
+	"dfu_bufsiz=0x10000\0" \
+	DFU_ALT_INFO_MMC \
+	DFU_ALT_INFO_EMMC \
+	DFU_ALT_INFO_RAM \
 
 #include <configs/ti_omap5_common.h>
 
 /* Enhance our eMMC support / experience. */
-#define CONFIG_CMD_GPT
-#define CONFIG_EFI_PARTITION
+#define CONFIG_RANDOM_UUID
+#define CONFIG_HSMMC2_8BIT
 
 /* CPSW Ethernet */
 #define CONFIG_BOOTP_DNS		/* Configurable parts of CMD_DHCP */
@@ -64,14 +85,12 @@
 
 /* USB xHCI HOST */
 #define CONFIG_USB_XHCI_OMAP
-#define CONFIG_USB_STORAGE
 #define CONFIG_SYS_USB_XHCI_MAX_ROOT_PORTS 2
 
 #define CONFIG_OMAP_USB_PHY
 #define CONFIG_OMAP_USB3PHY1_HOST
 
 /* SATA */
-#define CONFIG_BOARD_LATE_INIT
 #define CONFIG_SCSI
 #define CONFIG_LIBATA
 #define CONFIG_SCSI_AHCI
@@ -80,10 +99,6 @@
 #define CONFIG_SYS_SCSI_MAX_LUN		1
 #define CONFIG_SYS_SCSI_MAX_DEVICE	(CONFIG_SYS_SCSI_MAX_SCSI_ID * \
 						CONFIG_SYS_SCSI_MAX_LUN)
-
-/* EEPROM */
-#define CONFIG_EEPROM_CHIP_ADDRESS 0x50
-#define CONFIG_EEPROM_BUS_ADDRESS 0
 
 /*
  * Default to using SPI for environment, etc.
@@ -99,19 +114,9 @@
 #define CONFIG_SYS_SPI_ARGS_OFFS        0x140000
 #define CONFIG_SYS_SPI_ARGS_SIZE        0x80000
 
-#ifdef CONFIG_SPL_BUILD
-#undef CONFIG_DM_SPI
-#undef CONFIG_DM_SPI_FLASH
-#undef CONFIG_SPL_MAX_SIZE
-#define CONFIG_SPL_MAX_SIZE             (256 << 10) /* 256 KiB */
-#endif
-
 /* SPI SPL */
-#define CONFIG_SPL_SPI_SUPPORT
-#define CONFIG_SPL_DMA_SUPPORT
 #define CONFIG_TI_EDMA3
 #define CONFIG_SPL_SPI_LOAD
-#define CONFIG_SPL_SPI_FLASH_SUPPORT
 #define CONFIG_SYS_SPI_U_BOOT_OFFS     0x40000
 
 /* SPI */

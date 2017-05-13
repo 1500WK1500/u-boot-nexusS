@@ -14,7 +14,6 @@
  */
 #define CONFIG_MPC5200			1	/* This is an MPC5200 CPU */
 #define CONFIG_V38B			1	/* ...on V38B board */
-#define CONFIG_DISPLAY_BOARDINFO
 
 #define	CONFIG_SYS_TEXT_BASE		0xFF000000
 
@@ -28,7 +27,6 @@
 #define CONFIG_NETCONSOLE		1
 
 #define CONFIG_BOARD_EARLY_INIT_R	1	/* do board-specific init */
-#define CONFIG_BOARD_EARLY_INIT_F	1	/* do board-specific init */
 #define CONFIG_MISC_INIT_R
 
 #define CONFIG_SYS_XLB_PIPELINING		1	/* gives better performance */
@@ -39,7 +37,6 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1 */
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 
 /*
@@ -57,19 +54,11 @@
 /*
  * PCI - no support
  */
-#undef CONFIG_PCI
-
-/*
- * Partitions
- */
-#define CONFIG_MAC_PARTITION	1
-#define CONFIG_DOS_PARTITION	1
 
 /*
  * USB
  */
 #define CONFIG_USB_OHCI
-#define CONFIG_USB_STORAGE
 #define CONFIG_USB_CLOCK	0x0001BBBB
 #define CONFIG_USB_CONFIG	0x00001000
 
@@ -85,11 +74,9 @@
  * Command line configuration.
  */
 #define CONFIG_CMD_IDE
-#define CONFIG_CMD_DIAG
 #define CONFIG_CMD_IRQ
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_SDRAM
-#define CONFIG_CMD_DATE
 
 #define CONFIG_TIMESTAMP		/* Print image info with timestamp */
 
@@ -294,8 +281,6 @@
 /*
  * Status LED
  */
-#define  CONFIG_STATUS_LED		/* Status LED enabled */
-#define  CONFIG_BOARD_SPECIFIC_LED	/* version has board specific leds */
 
 #define CONFIG_SYS_LED_BASE	MPC5XXX_GPT7_ENABLE	/* Timer 7 GPIO */
 #ifndef __ASSEMBLY__

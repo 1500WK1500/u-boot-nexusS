@@ -74,6 +74,7 @@ SECTIONS
 		*(._secure.data)
 	}
 
+#ifdef CONFIG_ARMV7_PSCI
 	.secure_stack ALIGN(ADDR(.secure_data) + SIZEOF(.secure_data),
 			    CONSTANT(COMMONPAGESIZE)) (NOLOAD) :
 #ifdef __ARMV7_PSCI_STACK_IN_RAM
@@ -107,6 +108,8 @@ SECTIONS
 #ifndef __ARMV7_PSCI_STACK_IN_RAM
 	/* Reset VMA but don't allocate space if we have secure SRAM */
 	. = LOADADDR(.secure_stack);
+#endif
+
 #endif
 
 	.__secure_end : AT(ADDR(.__secure_end)) {

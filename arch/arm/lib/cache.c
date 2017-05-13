@@ -10,10 +10,6 @@
 #include <common.h>
 #include <malloc.h>
 
-#ifndef CONFIG_SYS_CACHELINE_SIZE
-#define CONFIG_SYS_CACHELINE_SIZE 32
-#endif
-
 /*
  * Flush range from all levels of d-cache/unified-cache.
  * Affects the range [start, start + size - 1].
@@ -111,7 +107,7 @@ phys_addr_t noncached_alloc(size_t size, size_t align)
 }
 #endif /* CONFIG_SYS_NONCACHED_MEMORY */
 
-#if defined(CONFIG_SYS_THUMB_BUILD)
+#if CONFIG_IS_ENABLED(SYS_THUMB_BUILD)
 void invalidate_l2_cache(void)
 {
 	unsigned int val = 0;

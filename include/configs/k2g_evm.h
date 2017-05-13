@@ -10,20 +10,22 @@
 #ifndef __CONFIG_K2G_EVM_H
 #define __CONFIG_K2G_EVM_H
 
+#include <environment/ti/mmc.h>
+#include <environment/ti/spi.h>
+
 /* Platform type */
 #define CONFIG_SOC_K2G
-#define CONFIG_K2G_EVM
 
 /* U-Boot general configuration */
 #define CONFIG_EXTRA_ENV_KS2_BOARD_SETTINGS				\
 	DEFAULT_MMC_TI_ARGS						\
 	DEFAULT_PMMC_BOOT_ENV						\
+	DEFAULT_FW_INITRAMFS_BOOT_ENV					\
 	"boot=mmc\0"							\
 	"console=ttyS0,115200n8\0"					\
 	"bootpart=0:2\0"						\
 	"bootdir=/boot\0"						\
 	"rd_spec=-\0"							\
-	"addr_mon=0x0c040000\0"						\
 	"args_ubi=setenv bootargs ${bootargs} rootfstype=ubifs "	\
 	"root=ubi0:rootfs rootflags=sync rw ubi.mtd=ubifs,2048\0"	\
 	"name_fdt=keystone-k2g-evm.dtb\0"				\
@@ -31,6 +33,8 @@
 	"name_ubi=k2g-evm-ubifs.ubi\0"					\
 	"name_uboot=u-boot-spi-k2g-evm.gph\0"				\
 	"init_mmc=run args_all args_mmc\0"				\
+	"init_fw_rd_mmc=load mmc ${bootpart} ${rdaddr} "		\
+		"${bootdir}/${name_fw_rd}; run set_rd_spec\0"		\
 	"soc_variant=k2g\0"						\
 	"get_fdt_mmc=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${name_fdt}\0"\
 	"get_kern_mmc=load mmc ${bootpart} ${loadaddr} "		\
@@ -40,9 +44,9 @@
 
 #define CONFIG_BOOTCOMMAND						\
 	"run envboot; "							\
-	"run set_name_pmmc init_${boot} get_pmmc_${boot} run_pmmc "	\
-	"get_fdt_${boot} get_mon_${boot} get_kern_${boot} "		\
-	"run_mon run_kern"
+	"run set_name_pmmc init_${boot} init_fw_rd_${boot} "		\
+	"get_pmmc_${boot} run_pmmc get_mon_${boot} run_mon "		\
+	"get_fdt_${boot} get_kern_${boot} run_kern"
 
 #include <configs/ti_armv7_keystone2.h>
 
@@ -59,11 +63,6 @@
 #define CONFIG_PHY_MICREL
 #define PHY_ANEG_TIMEOUT	10000 /* PHY needs longer aneg time */
 
-/* MMC/SD */
-#define CONFIG_MMC
-#define CONFIG_GENERIC_MMC
-#define CONFIG_OMAP_HSMMC
-
 #undef CONFIG_ENV_IS_IN_NAND
 #define CONFIG_ENV_IS_IN_FAT
 #define FAT_ENV_INTERFACE		"mmc"
@@ -77,6 +76,8 @@
 #define CONFIG_CADENCE_QSPI
 #define CONFIG_CQSPI_REF_CLK 384000000
 #define CONFIG_CQSPI_DECODER 0x0
+#define CONFIG_BOUNCE_BUFFER
 #endif
 
+#define SPI_MTD_PARTS	KEYSTONE_SPI1_MTD_PARTS
 #endif /* __CONFIG_K2G_EVM_H */

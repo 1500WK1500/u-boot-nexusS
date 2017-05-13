@@ -40,11 +40,8 @@
 
 /* select serial console configuration */
 #define CONFIG_SERIAL1
-#define CONFIG_BAUDRATE			115200
 
 /* Console configuration */
-#define CONFIG_SYS_CONSOLE_INFO_QUIET
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
 
 #define CONFIG_BOOTARGS			"Please use defined boot"
 #define CONFIG_BOOTCOMMAND		"run autoboot"
@@ -193,7 +190,6 @@
 /* USB */
 #define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_EXYNOS
-#define CONFIG_USB_STORAGE
 
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS	3
 #define CONFIG_USB_HOST_ETHER

@@ -21,7 +21,6 @@
 #undef CONFIG_CMD_EXT4_WRITE
 #undef CONFIG_CMD_MMC_SPI
 #undef CONFIG_CMD_SPI
-#undef CONFIG_CMD_PXE
 
 #define CONFIG_CMD_CACHE
 
@@ -32,33 +31,9 @@
 
 #define CONFIG_SYS_BOOTM_LEN		(16 << 20)
 
-#define MACH_TYPE_BOSCH_SHC_B		9001
-#define MACH_TYPE_BOSCH_SHC_B2		9002
-#define MACH_TYPE_BOSCH_SHC_C		9003
-#define MACH_TYPE_BOSCH_SHC_C2		9004
-#define MACH_TYPE_BOSCH_SHC_C3		9005
-#define MACH_TYPE_BOSCH_SHC		9006
-#ifdef CONFIG_B_SAMPLE
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC_B
-#elif defined CONFIG_B2_SAMPLE
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC_B2
-#elif defined CONFIG_C_SAMPLE
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC_C
-#elif defined CONFIG_C2_SAMPLE
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC_C2
-#elif defined CONFIG_C3_SAMPLE
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC_C3
-#elif defined CONFIG_SERIES
-# define CONFIG_MACH_TYPE		MACH_TYPE_BOSCH_SHC
-#endif /* #ifdef CONFIG_B_SAMPLE */
-
-#define CONFIG_BOARD_LATE_INIT
-
 /* Clock Defines */
 #define V_OSCK				24000000  /* Clock output from T2 */
 #define V_SCLK				(V_OSCK)
-
-#define CONFIG_VERSION_VARIABLE
 
 #define CONFIG_ENV_IS_IN_MMC		1
 
@@ -86,12 +61,6 @@
 #define CONFIG_ENV_OFFSET_REDUND    0x9000 /* 36 kB */
 #define CONFIG_ENV_SIZE_REDUND      CONFIG_ENV_SIZE
 
-/* Enhance our eMMC support / experience. */
-#define CONFIG_CMD_GPT
-#define CONFIG_EFI_PARTITION
-#ifdef CONFIG_SPL_BUILD
-#undef CONFIG_ISO_PARTITION
-#endif
 #ifndef CONFIG_SHC_ICT
 /*
  * In builds other than ICT, reset to retry after timeout
@@ -274,21 +243,16 @@
 #define CONFIG_SYS_NS16550_COM4		0x481a6000	/* UART3 */
 #define CONFIG_SYS_NS16550_COM5		0x481a8000	/* UART4 */
 #define CONFIG_SYS_NS16550_COM6		0x481aa000	/* UART5 */
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_CONS_INDEX               1
 
 /* PMIC support */
 #define CONFIG_POWER_TPS65217
 
 /* SPL */
-#define CONFIG_SPL_POWER_SUPPORT
-#define CONFIG_SPL_YMODEM_SUPPORT
 
-#define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
 
 #ifndef CONFIG_SPL_USBETH_SUPPORT
-/* To support eMMC booting */
-#define CONFIG_STORAGE_EMMC
 #define CONFIG_FASTBOOT_FLASH_MMC_DEV   1
 #endif
 
@@ -328,11 +292,6 @@
 
 #if defined CONFIG_SHC_NETBOOT
 #ifdef CONFIG_SPL_BUILD
-#define CONFIG_SPL_NET_SUPPORT
-#define CONFIG_SPL_ETH_SUPPORT
-#define CONFIG_SPL_NET_VCI_STRING	"AM335x U-Boot SPL"
-#define CONFIG_SPL_ENV_SUPPORT
-#define CONFIG_SPL_MMC_SUPPORT
 #define CONFIG_ENV_IS_NOWHERE
 #undef CONFIG_ENV_IS_IN_MMC
 #endif

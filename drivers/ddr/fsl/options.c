@@ -33,7 +33,7 @@ struct dynamic_odt {
 /* Quad rank is not verified yet due availability.
  * Replacing 20 OHM with 34 OHM since DDR4 doesn't have 20 OHM option
  */
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS_AND_OTHER_DIMM,
@@ -60,7 +60,7 @@ static const struct dynamic_odt single_Q[4] = {
 	}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -77,7 +77,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -89,7 +89,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -116,7 +116,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -137,7 +137,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	},
 	{0, 0, 0, 0}
 };
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -159,7 +159,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -176,7 +176,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -193,7 +193,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -210,7 +210,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -223,7 +223,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -236,7 +236,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -263,7 +263,7 @@ static const struct dynamic_odt odt_unknown[4] = {
 	}
 };
 #elif defined(CONFIG_SYS_FSL_DDR3)
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS_AND_OTHER_DIMM,
@@ -290,7 +290,7 @@ static const struct dynamic_odt single_Q[4] = {
 	}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -307,7 +307,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -319,7 +319,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -346,7 +346,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -367,7 +367,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	},
 	{0, 0, 0, 0}
 };
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -389,7 +389,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -406,7 +406,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -423,7 +423,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -440,7 +440,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -453,7 +453,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -466,7 +466,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -493,14 +493,14 @@ static const struct dynamic_odt odt_unknown[4] = {
 	}
 };
 #else	/* CONFIG_SYS_FSL_DDR3 */
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -517,7 +517,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -529,7 +529,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -556,7 +556,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -578,7 +578,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -600,7 +600,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -617,7 +617,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -634,7 +634,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -651,7 +651,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -664,7 +664,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -677,7 +677,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -916,7 +916,7 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 		if ((pdimm[0].data_width >= 64) && \
 			(pdimm[0].data_width <= 72))
 			popts->data_bus_width = 0;
-		else if ((pdimm[0].data_width >= 32) || \
+		else if ((pdimm[0].data_width >= 32) && \
 			(pdimm[0].data_width <= 40))
 			popts->data_bus_width = 1;
 		else {
@@ -1077,7 +1077,7 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 	 * if CONFIG_SYS_FSL_DDR_INTLV_256B is defined, mandatory interleaving
 	 * with 256 Byte is enabled.
 	 */
-#if (CONFIG_NUM_DDR_CONTROLLERS > 1)
+#if (CONFIG_SYS_NUM_DDR_CTLRS > 1)
 	if (!hwconfig_sub_f("fsl_ddr", "ctlr_intlv", buf))
 #ifdef CONFIG_SYS_FSL_DDR_INTLV_256B
 		;
@@ -1107,39 +1107,39 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 					"ctlr_intlv",
 					"cacheline", buf)) {
 		popts->memctl_interleaving_mode =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : FSL_DDR_CACHE_LINE_INTERLEAVING;
 		popts->memctl_interleaving =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : 1;
 	} else if (hwconfig_subarg_cmp_f("fsl_ddr",
 					"ctlr_intlv",
 					"page", buf)) {
 		popts->memctl_interleaving_mode =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : FSL_DDR_PAGE_INTERLEAVING;
 		popts->memctl_interleaving =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : 1;
 	} else if (hwconfig_subarg_cmp_f("fsl_ddr",
 					"ctlr_intlv",
 					"bank", buf)) {
 		popts->memctl_interleaving_mode =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : FSL_DDR_BANK_INTERLEAVING;
 		popts->memctl_interleaving =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : 1;
 	} else if (hwconfig_subarg_cmp_f("fsl_ddr",
 					"ctlr_intlv",
 					"superbank", buf)) {
 		popts->memctl_interleaving_mode =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : FSL_DDR_SUPERBANK_INTERLEAVING;
 		popts->memctl_interleaving =
-			((CONFIG_NUM_DDR_CONTROLLERS == 3) && ctrl_num == 2) ?
+			((CONFIG_SYS_NUM_DDR_CTLRS == 3) && ctrl_num == 2) ?
 			0 : 1;
-#if (CONFIG_NUM_DDR_CONTROLLERS == 3)
+#if (CONFIG_SYS_NUM_DDR_CTLRS == 3)
 	} else if (hwconfig_subarg_cmp_f("fsl_ddr",
 					"ctlr_intlv",
 					"3way_1KB", buf)) {
@@ -1155,7 +1155,7 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 					"3way_8KB", buf)) {
 		popts->memctl_interleaving_mode =
 			FSL_DDR_3WAY_8KB_INTERLEAVING;
-#elif (CONFIG_NUM_DDR_CONTROLLERS == 4)
+#elif (CONFIG_SYS_NUM_DDR_CTLRS == 4)
 	} else if (hwconfig_subarg_cmp_f("fsl_ddr",
 					"ctlr_intlv",
 					"4way_1KB", buf)) {
@@ -1178,7 +1178,7 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 	}
 #endif	/* CONFIG_SYS_FSL_DDR_INTLV_256B */
 done:
-#endif /* CONFIG_NUM_DDR_CONTROLLERS > 1 */
+#endif /* CONFIG_SYS_NUM_DDR_CTLRS > 1 */
 	if ((hwconfig_sub_f("fsl_ddr", "bank_intlv", buf)) &&
 		(CONFIG_CHIP_SELECTS_PER_CTRL > 1)) {
 		/* test null first. if CONFIG_HWCONFIG is not defined,
@@ -1356,10 +1356,10 @@ void check_interleaving_options(fsl_ddr_info_t *pinfo)
 		case FSL_DDR_PAGE_INTERLEAVING:
 		case FSL_DDR_BANK_INTERLEAVING:
 		case FSL_DDR_SUPERBANK_INTERLEAVING:
-#if (3 == CONFIG_NUM_DDR_CONTROLLERS)
+#if (3 == CONFIG_SYS_NUM_DDR_CTLRS)
 				k = 2;
 #else
-				k = CONFIG_NUM_DDR_CONTROLLERS;
+				k = CONFIG_SYS_NUM_DDR_CTLRS;
 #endif
 			break;
 		case FSL_DDR_3WAY_1KB_INTERLEAVING:
@@ -1369,7 +1369,7 @@ void check_interleaving_options(fsl_ddr_info_t *pinfo)
 		case FSL_DDR_4WAY_4KB_INTERLEAVING:
 		case FSL_DDR_4WAY_8KB_INTERLEAVING:
 		default:
-			k = CONFIG_NUM_DDR_CONTROLLERS;
+			k = CONFIG_SYS_NUM_DDR_CTLRS;
 			break;
 		}
 		debug("%d of %d controllers are interleaving.\n", j, k);

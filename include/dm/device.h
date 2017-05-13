@@ -46,6 +46,32 @@ struct driver_info;
 
 #define DM_FLAG_OF_PLATDATA		(1 << 8)
 
+/*
+ * Call driver remove function to stop currently active DMA transfers or
+ * give DMA buffers back to the HW / controller. This may be needed for
+ * some drivers to do some final stage cleanup before the OS is called
+ * (U-Boot exit)
+ */
+#define DM_FLAG_ACTIVE_DMA		(1 << 9)
+
+/*
+ * One or multiple of these flags are passed to device_remove() so that
+ * a selective device removal as specified by the remove-stage and the
+ * driver flags can be done.
+ */
+enum {
+	/* Normal remove, remove all devices */
+	DM_REMOVE_NORMAL     = 1 << 0,
+
+	/* Remove devices with active DMA */
+	DM_REMOVE_ACTIVE_DMA = DM_FLAG_ACTIVE_DMA,
+
+	/* Add more use cases here */
+
+	/* Remove devices with any active flag */
+	DM_REMOVE_ACTIVE_ALL = DM_REMOVE_ACTIVE_DMA,
+};
+
 /**
  * struct udevice - An instance of a driver
  *
@@ -120,6 +146,16 @@ struct udevice {
 
 /* Returns non-zero if the device is active (probed and not removed) */
 #define device_active(dev)	((dev)->flags & DM_FLAG_ACTIVATED)
+
+static inline int dev_of_offset(const struct udevice *dev)
+{
+	return dev->of_offset;
+}
+
+static inline void dev_set_of_offset(struct udevice *dev, int of_offset)
+{
+	dev->of_offset = of_offset;
+}
 
 /**
  * struct udevice_id - Lists the compatible strings supported by a driver
@@ -495,6 +531,22 @@ void *dev_map_physmem(struct udevice *dev, unsigned long size);
  * @return addr
  */
 fdt_addr_t dev_get_addr_index(struct udevice *dev, int index);
+
+/**
+ * dev_get_addr_size_index() - Get the indexed reg property of a device
+ *
+ * Returns the address and size specified in the 'reg' property of a device.
+ *
+ * @dev: Pointer to a device
+ * @index: the 'reg' property can hold a list of <addr, size> pairs
+ *	   and @index is used to select which one is required
+ * @size: Pointer to size varible - this function returns the size
+ *        specified in the 'reg' property here
+ *
+ * @return addr
+ */
+fdt_addr_t dev_get_addr_size_index(struct udevice *dev, int index,
+				   fdt_size_t *size);
 
 /**
  * dev_get_addr_name() - Get the reg property of a device, indexed by name

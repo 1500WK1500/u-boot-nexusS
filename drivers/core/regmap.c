@@ -13,6 +13,8 @@
 #include <mapmem.h>
 #include <regmap.h>
 
+#include <asm/io.h>
+
 DECLARE_GLOBAL_DATA_PTR;
 
 static struct regmap *regmap_alloc_count(int count)
@@ -68,13 +70,14 @@ int regmap_init_mem(struct udevice *dev, struct regmap **mapp)
 	int addr_len, size_len, both_len;
 	int parent;
 	int len;
+	int index;
 
-	parent = dev->parent->of_offset;
+	parent = dev_of_offset(dev->parent);
 	addr_len = fdt_address_cells(blob, parent);
 	size_len = fdt_size_cells(blob, parent);
 	both_len = addr_len + size_len;
 
-	cell = fdt_getprop(blob, dev->of_offset, "reg", &len);
+	cell = fdt_getprop(blob, dev_of_offset(dev), "reg", &len);
 	len /= sizeof(*cell);
 	count = len / both_len;
 	if (!cell || !count)
@@ -84,13 +87,14 @@ int regmap_init_mem(struct udevice *dev, struct regmap **mapp)
 	if (!map)
 		return -ENOMEM;
 
-	map->base = fdtdec_get_number(cell, addr_len);
-
-	for (range = map->range; count > 0;
-	     count--, cell += both_len, range++) {
-		range->start = fdtdec_get_number(cell, addr_len);
-		range->size = fdtdec_get_number(cell + addr_len, size_len);
+	for (range = map->range, index = 0; count > 0;
+	     count--, cell += both_len, range++, index++) {
+		fdt_size_t sz;
+		range->start = fdtdec_get_addr_size_fixed(blob, dev->of_offset,
+				"reg", index, addr_len, size_len, &sz, true);
+		range->size = sz;
 	}
+	map->base = map->range[0].start;
 
 	*mapp = map;
 
@@ -114,6 +118,24 @@ int regmap_uninit(struct regmap *map)
 	if (map->range_count > 1)
 		free(map->range);
 	free(map);
+
+	return 0;
+}
+
+int regmap_read(struct regmap *map, uint offset, uint *valp)
+{
+	uint32_t *ptr = map_physmem(map->base + offset, 4, MAP_NOCACHE);
+
+	*valp = le32_to_cpu(readl(ptr));
+
+	return 0;
+}
+
+int regmap_write(struct regmap *map, uint offset, uint val)
+{
+	uint32_t *ptr = map_physmem(map->base + offset, 4, MAP_NOCACHE);
+
+	writel(cpu_to_le32(val), ptr);
 
 	return 0;
 }

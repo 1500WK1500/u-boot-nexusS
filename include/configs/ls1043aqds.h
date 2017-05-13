@@ -9,9 +9,6 @@
 
 #include "ls1043a_common.h"
 
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DISPLAY_BOARDINFO
-
 #if defined(CONFIG_NAND_BOOT) || defined(CONFIG_SD_BOOT)
 #define CONFIG_SYS_TEXT_BASE		0x82000000
 #elif defined(CONFIG_QSPI_BOOT)
@@ -41,9 +38,8 @@ unsigned long get_board_ddr_clk(void);
 #define SPD_EEPROM_ADDRESS		0x51
 #define CONFIG_SYS_SPD_BUS_NUM		0
 
+#ifndef CONFIG_SPL
 #define CONFIG_FSL_DDR_INTERACTIVE	/* Interactive debugging */
-#ifndef CONFIG_SYS_FSL_DDR4
-#define CONFIG_SYS_FSL_DDR3		/* Use DDR3 memory */
 #endif
 
 #define CONFIG_DDR_ECC
@@ -51,8 +47,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_ECC_INIT_VIA_DDRCONTROLLER
 #define CONFIG_MEM_INIT_VALUE           0xdeadbeef
 #endif
-
-#define CONFIG_SYS_HAS_SERDES
 
 #ifdef CONFIG_SYS_DPAA_FMAN
 #define CONFIG_FMAN_ENET
@@ -105,8 +99,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_SCSI_AHCI
 #define CONFIG_SCSI_AHCI_PLAT
 #define CONFIG_SCSI
-#define CONFIG_DOS_PARTITION
-#define CONFIG_BOARD_LATE_INIT
 
 /* EEPROM */
 #define CONFIG_ID_EEPROM
@@ -222,7 +214,6 @@ unsigned long get_board_ddr_clk(void);
 #if defined(CONFIG_QSPI_BOOT) || defined(CONFIG_SD_BOOT_QSPI)
 #define CONFIG_QIXIS_I2C_ACCESS
 #define CONFIG_SYS_I2C_EARLY_INIT
-#define CONFIG_SYS_NO_FLASH
 #endif
 
 /*
@@ -388,7 +379,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_USB_XHCI_FSL
 #define CONFIG_USB_MAX_CONTROLLER_COUNT		3
 #define CONFIG_SYS_USB_XHCI_MAX_ROOT_PORTS	2
-#define CONFIG_USB_STORAGE
 #endif
 
 /*
@@ -405,12 +395,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_SYS_MEMTEST_END		0x9fffffff
 
 #define CONFIG_SYS_HZ			1000
-
-/*
- * Stack sizes
- * The stack sizes are set up in start.S using the settings below
- */
-#define CONFIG_STACKSIZE		(30 * 1024)
 
 #define CONFIG_SYS_INIT_SP_OFFSET \
 	(CONFIG_SYS_INIT_RAM_SIZE - GENERATED_GBL_DATA_SIZE)

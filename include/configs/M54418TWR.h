@@ -22,7 +22,6 @@
 
 #define CONFIG_MCFUART
 #define CONFIG_SYS_UART_PORT		(0)
-#define CONFIG_BAUDRATE		115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600 , 19200 , 38400 , 57600, 115200 }
 
 #undef CONFIG_WATCHDOG
@@ -38,9 +37,7 @@
 #define CONFIG_BOOTP_HOSTNAME
 
 /* Command line configuration */
-#undef CONFIG_CMD_DATE
 #undef CONFIG_CMD_JFFS2
-#undef CONFIG_CMD_UBI
 #undef CONFIG_CMD_NAND
 #define CONFIG_CMD_REGINFO
 
@@ -278,14 +275,12 @@
  * Environment is embedded in u-boot in the second sector of the flash
  */
 #if !defined(CONFIG_SERIAL_BOOT)  /*MRAM boot*/
-#define CONFIG_SYS_NO_FLASH
 #define CONFIG_ENV_IS_IN_MRAM	1
 #define CONFIG_ENV_ADDR		(0x40000 - 0x1000) /*MRAM size 40000*/
 #define CONFIG_ENV_SIZE		0x1000
 #endif
 
 #if defined(CONFIG_CF_SBF)
-#define CONFIG_SYS_NO_FLASH
 #define CONFIG_ENV_IS_IN_SPI_FLASH	1
 #define CONFIG_ENV_SPI_CS		1
 #define CONFIG_ENV_OFFSET		0x40000
@@ -293,7 +288,6 @@
 #define CONFIG_ENV_SECT_SIZE		0x10000
 #endif
 #if defined(CONFIG_SYS_NAND_BOOT)
-#define CONFIG_SYS_NO_FLASH
 #define CONFIG_ENV_IS_NOWHERE
 #define CONFIG_ENV_OFFSET	0x80000
 #define CONFIG_ENV_SIZE	0x20000

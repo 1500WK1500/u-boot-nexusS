@@ -13,8 +13,6 @@
 #include "mkimage.h"
 #include "rkcommon.h"
 
-static char dummy_hdr[RK_IMAGE_HEADER_LEN];
-
 static int rksd_verify_header(unsigned char *buf,  int size,
 				 struct image_tool_params *params)
 {
@@ -31,16 +29,21 @@ static void rksd_set_header(void *buf,  struct stat *sbuf,  int ifd,
 	unsigned int size;
 	int ret;
 
+	printf("params->file_size %d\n", params->file_size);
+	printf("params->orig_file_size %d\n", params->orig_file_size);
+
+	/*
+	 * We need to calculate this using 'RK_SPL_HDR_START' and not using
+	 * 'tparams->header_size', as the additional byte inserted when
+	 * 'is_boot0' is true counts towards the payload.
+	 */
 	size = params->file_size - RK_SPL_HDR_START;
 	ret = rkcommon_set_header(buf, size, params);
 	if (ret) {
 		/* TODO(sjg@chromium.org): This method should return an error */
-		printf("Warning: SPL image is too large (size %#x) and will not boot\n",
-		       size);
+		printf("Warning: SPL image is too large (size %#x) and will "
+		       "not boot\n", size);
 	}
-
-	memcpy(buf + RK_SPL_HDR_START, rkcommon_get_spl_hdr(params),
-	       RK_SPL_HDR_SIZE);
 }
 
 static int rksd_extract_subimage(void *buf,  struct image_tool_params *params)
@@ -56,16 +59,14 @@ static int rksd_check_image_type(uint8_t type)
 		return EXIT_FAILURE;
 }
 
-/* We pad the file out to a fixed size - this method returns that size */
 static int rksd_vrec_header(struct image_tool_params *params,
 			    struct image_type_params *tparams)
 {
-	int pad_size;
-
-	pad_size = RK_SPL_HDR_START + rkcommon_get_spl_size(params);
-	debug("pad_size %x\n", pad_size);
-
-	return pad_size - params->file_size;
+	/*
+	 * Pad to the RK_BLK_SIZE (512 bytes) to be consistent with init_size
+	 * being encoded in RK_BLK_SIZE units in header0 (see rkcommon.c).
+	 */
+	return rkcommon_vrec_header(params, tparams, RK_BLK_SIZE);
 }
 
 /*
@@ -74,8 +75,8 @@ static int rksd_vrec_header(struct image_tool_params *params,
 U_BOOT_IMAGE_TYPE(
 	rksd,
 	"Rockchip SD Boot Image support",
-	RK_IMAGE_HEADER_LEN,
-	dummy_hdr,
+	0,
+	NULL,
 	rkcommon_check_params,
 	rksd_verify_header,
 	rksd_print_header,

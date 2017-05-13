@@ -12,8 +12,6 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_DISPLAY_BOARDINFO
-
 /*
  * High Level Configuration Options
  */
@@ -43,7 +41,6 @@
 #define CONFIG_SYS_LCRR_CLKDIV	LCRR_CLKDIV_8
 
 /* board pre init: do not call, nothing to do */
-#undef CONFIG_BOARD_EARLY_INIT_F
 
 /* detect the number of flash banks */
 #define CONFIG_BOARD_EARLY_INIT_R
@@ -227,11 +224,9 @@
  * General PCI
  * Addresses are mapped 1-1.
  */
-#define CONFIG_PCI
 
 #if defined(CONFIG_PCI)
 
-#define CONFIG_PCI_PNP			/* do pci plug-and-play */
 #define CONFIG_PCI_SCAN_SHOW		/* show pci devices on startup */
 
 /* PCI1 host bridge */
@@ -285,7 +280,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_DTT
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_JFFS2
@@ -482,8 +476,6 @@
 #define CONFIG_LOADADDR		400000
 
 #undef  CONFIG_BOOTARGS		/* the boot command will set bootargs */
-
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_PREBOOT	"echo;"	\
 	"echo Type \\\"run flash_nfs\\\" to mount root filesystem over NFS;" \

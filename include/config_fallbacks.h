@@ -55,8 +55,8 @@
 #define HAVE_BLOCK_DEVICE
 #endif
 
-#if (defined(CONFIG_PARTITION_UUIDS) || \
-	defined(CONFIG_EFI_PARTITION) || \
+#if (CONFIG_IS_ENABLED(PARTITION_UUIDS) || \
+	CONFIG_IS_ENABLED(EFI_PARTITION) || \
 	defined(CONFIG_RANDOM_UUID) || \
 	defined(CONFIG_CMD_UUID) || \
 	defined(CONFIG_BOOTP_PXE)) && \
@@ -69,10 +69,6 @@
 	(!defined(CONFIG_LIB_RAND) && \
 	!defined(CONFIG_LIB_HW_RAND))
 #define CONFIG_LIB_RAND
-#endif
-
-#if defined(CONFIG_API) && defined(CONFIG_LCD)
-#define CONFIG_CMD_BMP
 #endif
 
 #ifndef CONFIG_SYS_PBSIZE
@@ -96,7 +92,6 @@
 #ifndef CONFIG_CMDLINE
 #undef CONFIG_CMDLINE_EDITING
 #undef CONFIG_SYS_LONGHELP
-#undef CONFIG_MENU
 #endif
 
 #endif	/* __CONFIG_FALLBACKS_H */

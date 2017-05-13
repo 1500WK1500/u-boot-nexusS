@@ -20,11 +20,6 @@
 
 #define CONFIG_MACH_TYPE		MACH_TYPE_VENTANA
 
-/* SD/MMC */
-#define CONFIG_MMC
-#define CONFIG_GENERIC_MMC
-#define CONFIG_TEGRA_MMC
-
 /* Environment in eMMC, at the end of 2nd "boot sector" */
 #define CONFIG_ENV_IS_IN_MMC
 #define CONFIG_ENV_OFFSET (-CONFIG_ENV_SIZE)
@@ -34,20 +29,10 @@
 /* USB Host support */
 #define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
-#define CONFIG_USB_STORAGE
 
 /* USB networking support */
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
-
-/* General networking support */
-
-/* USB keyboard */
-#define CONFIG_USB_KEYBOARD
-
-/* LCD support */
-#define CONFIG_SYS_WHITE_ON_BLACK
-#define CONFIG_CONSOLE_SCROLL_LINES	10
 
 #include "tegra-common-post.h"
 

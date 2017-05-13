@@ -19,8 +19,6 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_SYS_CACHELINE_SIZE 64
-
 /*
  * High Level Configuration Options
  */
@@ -29,11 +27,6 @@
 #define CONFIG_OMAP3430			/* which is in a 3430 */
 #define CONFIG_OMAP3_RX51		/* working with RX51 */
 #define CONFIG_SYS_L2CACHE_OFF		/* pretend there is no L2 CACHE */
-#define CONFIG_OMAP_COMMON
-/* Common ARM Erratas */
-#define CONFIG_ARM_ERRATA_454179
-#define CONFIG_ARM_ERRATA_430973
-#define CONFIG_ARM_ERRATA_621766
 
 #define CONFIG_MACH_TYPE		MACH_TYPE_NOKIA_RX51
 
@@ -51,17 +44,10 @@
 #include <asm/arch/mem.h>
 #include <linux/stringify.h>
 
-/*
- * Display CPU and Board information
- */
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DISPLAY_BOARDINFO
-
 /* Clock Defines */
 #define V_OSCK			26000000	/* Clock output from T2 */
 #define V_SCLK			(V_OSCK >> 1)
 
-#undef CONFIG_USE_IRQ				/* no support for IRQs */
 #define CONFIG_MISC_INIT_R
 #define CONFIG_SKIP_LOWLEVEL_INIT		/* X-Loader set everything up */
 
@@ -100,12 +86,7 @@
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE { 4800, 9600, 19200, 38400, 57600, 115200 }
-#define CONFIG_MMC
-#define CONFIG_GENERIC_MMC
-#define CONFIG_OMAP_HSMMC
-#define CONFIG_DOS_PARTITION
 
 /* USB */
 #define CONFIG_USB_MUSB_UDC
@@ -120,16 +101,10 @@
 #define CONFIG_USBD_MANUFACTURER	"Nokia"
 #define CONFIG_USBD_PRODUCT_NAME	"N900"
 
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
-#define CONFIG_SYS_NO_FLASH
-
 /* commands to include */
 
 #define CONFIG_CMDLINE_EDITING		/* add command line history */
 #define CONFIG_AUTO_COMPLETE		/* add autocompletion support */
-
-#define CONFIG_CMD_BOOTMENU		/* ANSI terminal Boot Menu */
-#define CONFIG_CMD_CLEAR		/* ANSI terminal clear screen command */
 
 #ifdef ONENAND_SUPPORT
 
@@ -137,7 +112,6 @@
 #define CONFIG_CMD_MTDPARTS		/* mtd parts support */
 
 #ifdef UBIFS_SUPPORT
-#define CONFIG_CMD_UBI			/* UBI Support */
 #define CONFIG_CMD_UBIFS		/* UBIFS Support */
 #endif
 
@@ -152,7 +126,6 @@
 /*
  * TWL4030
  */
-#define CONFIG_TWL4030_POWER
 #define CONFIG_TWL4030_LED
 #define CONFIG_TWL4030_KEYPAD
 
@@ -234,13 +207,9 @@
  * Framebuffer
  */
 /* Video console */
-#define CONFIG_VIDEO
-#define CONFIG_CFB_CONSOLE
-#define CONFIG_CFB_CONSOLE_ANSI	/* Enable ANSI escape codes in framebuffer */
 #define CONFIG_VIDEO_LOGO
 #define VIDEO_FB_16BPP_PIXEL_SWAP
 #define VIDEO_FB_16BPP_WORD_SWAP
-#define CONFIG_VIDEO_SW_CURSOR
 #define CONFIG_SPLASH_SCREEN
 
 /* functions for cfb_console */
@@ -379,7 +348,6 @@ int rx51_kp_getc(struct stdio_dev *sdev);
 	"run attachboot;" \
 	"echo"
 
-#define CONFIG_MENU
 #define CONFIG_MENU_SHOW
 
 /*
@@ -407,13 +375,6 @@ int rx51_kp_getc(struct stdio_dev *sdev);
  */
 #define CONFIG_SYS_TIMERBASE		(OMAP34XX_GPT2)
 #define CONFIG_SYS_PTV			2	/* Divisor: 2^(PTV+1) => 8 */
-
-/*
- * Stack sizes
- *
- * The stack sizes are set up in start.S using the settings below
- */
-#define CONFIG_STACKSIZE		(128 << 10) /* regular stack 128 KiB */
 
 /*
  * Physical Memory Map

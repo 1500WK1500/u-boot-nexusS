@@ -29,15 +29,12 @@
 #define CONFIG_SYS_TEXT_BASE	0xFFF90000
 #endif
 
-#define CONFIG_DISPLAY_BOARDINFO
-
 #define CONFIG_SYS_CLK_FREQ	33333400
 
 #if 0 /* temporary disabled because OS/9 does not like dcache on startup */
 #define CONFIG_4xx_DCACHE		/* enable dcache        */
 #endif
 
-#define CONFIG_BOARD_EARLY_INIT_F 1	/* Call board_early_init_f */
 #define CONFIG_MISC_INIT_F	1
 #define CONFIG_MISC_INIT_R	1	/* Call misc_init_r     */
 #define CONFIG_BOARD_TYPES	1	/* support board types  */
@@ -88,7 +85,6 @@
 #define CONFIG_SYS_NS16550_REG_SIZE	1
 #define CONFIG_SYS_NS16550_CLK		get_serial_clock()
 #undef CONFIG_SYS_EXT_SERIAL_CLOCK
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_SYS_BAUDRATE_TABLE						\
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200}
@@ -249,7 +245,6 @@
 
 /* USB */
 #define CONFIG_USB_OHCI_NEW
-#define CONFIG_USB_STORAGE
 #define CONFIG_SYS_OHCI_BE_CONTROLLER
 
 #define CONFIG_SYS_USB_OHCI_BOARD_INIT 1
@@ -262,12 +257,7 @@
 #define USB_2_0_DEVICE
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
-#define CONFIG_CMD_BSP
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_DTT
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_NAND
@@ -286,8 +276,6 @@
 
 #define CONFIG_LOGBUFFER
 #define CONFIG_SYS_POST_CACHE_ADDR	0x7fff0000	/* free virtual address     */
-
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV	/* Otherwise it catches logbuffer as output */
 
 #define CONFIG_SUPPORT_VFAT
 
@@ -312,15 +300,12 @@
 
 #define CONFIG_CMDLINE_EDITING	1	/* add command line history     */
 #define CONFIG_MX_CYCLIC	1	/* enable mdc/mwc commands      */
-#define CONFIG_VERSION_VARIABLE 1	/* include version env variable */
 
 /*-----------------------------------------------------------------------
  * PCI stuff
  *----------------------------------------------------------------------*/
 /* General PCI */
-#define CONFIG_PCI		/* include pci support          */
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP		/* do (not) pci plug-and-play   */
 #define CONFIG_SYS_PCI_CACHE_LINE_SIZE	0	/* to avoid problems with PNP   */
 #define CONFIG_PCI_SCAN_SHOW	/* show pci devices on startup  */
 #define CONFIG_SYS_PCI_TARGBASE	0x80000000 /* PCIaddr mapped to CONFIG_SYS_PCI_MEMBASE */
@@ -396,7 +381,5 @@
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	230400	/* speed to run kgdb serial port */
 #endif
-
-#define CONFIG_API		1
 
 #endif /* __CONFIG_H */

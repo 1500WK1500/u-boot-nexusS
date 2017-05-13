@@ -88,7 +88,7 @@
 #include <errno.h>
 #include <net.h>
 #include <net/tftp.h>
-#if defined(CONFIG_STATUS_LED)
+#if defined(CONFIG_LED_STATUS)
 #include <miiphy.h>
 #include <status_led.h>
 #endif
@@ -518,15 +518,15 @@ restart:
 
 #if defined(CONFIG_MII) || defined(CONFIG_CMD_MII)
 #if	defined(CONFIG_SYS_FAULT_ECHO_LINK_DOWN)	&& \
-	defined(CONFIG_STATUS_LED)			&& \
-	defined(STATUS_LED_RED)
+	defined(CONFIG_LED_STATUS)			&& \
+	defined(CONFIG_LED_STATUS_RED)
 	/*
 	 * Echo the inverted link state to the fault LED.
 	 */
 	if (miiphy_link(eth_get_dev()->name, CONFIG_SYS_FAULT_MII_ADDR))
-		status_led_set(STATUS_LED_RED, STATUS_LED_OFF);
+		status_led_set(CONFIG_LED_STATUS_RED, CONFIG_LED_STATUS_OFF);
 	else
-		status_led_set(STATUS_LED_RED, STATUS_LED_ON);
+		status_led_set(CONFIG_LED_STATUS_RED, CONFIG_LED_STATUS_ON);
 #endif /* CONFIG_SYS_FAULT_ECHO_LINK_DOWN, ... */
 #endif /* CONFIG_MII, ... */
 #ifdef CONFIG_USB_KEYBOARD
@@ -583,16 +583,18 @@ restart:
 
 #if defined(CONFIG_MII) || defined(CONFIG_CMD_MII)
 #if	defined(CONFIG_SYS_FAULT_ECHO_LINK_DOWN)	&& \
-	defined(CONFIG_STATUS_LED)			&& \
-	defined(STATUS_LED_RED)
+	defined(CONFIG_LED_STATUS)			&& \
+	defined(CONFIG_LED_STATUS_RED)
 			/*
 			 * Echo the inverted link state to the fault LED.
 			 */
 			if (miiphy_link(eth_get_dev()->name,
 					CONFIG_SYS_FAULT_MII_ADDR))
-				status_led_set(STATUS_LED_RED, STATUS_LED_OFF);
+				status_led_set(CONFIG_LED_STATUS_RED,
+					       CONFIG_LED_STATUS_OFF);
 			else
-				status_led_set(STATUS_LED_RED, STATUS_LED_ON);
+				status_led_set(CONFIG_LED_STATUS_RED,
+					       CONFIG_LED_STATUS_ON);
 #endif /* CONFIG_SYS_FAULT_ECHO_LINK_DOWN, ... */
 #endif /* CONFIG_MII, ... */
 			debug_cond(DEBUG_INT_STATE, "--- net_loop timeout\n");
@@ -834,15 +836,7 @@ int net_send_udp_packet(uchar *ether, struct in_addr dest, int dport, int sport,
 #ifndef CONFIG_NET_MAXDEFRAG
 #define CONFIG_NET_MAXDEFRAG 16384
 #endif
-/*
- * MAXDEFRAG, above, is chosen in the config file and  is real data
- * so we need to add the NFS overhead, which is more than TFTP.
- * To use sizeof in the internal unnamed structures, we need a real
- * instance (can't do "sizeof(struct rpc_t.u.reply))", unfortunately).
- * The compiler doesn't complain nor allocates the actual structure
- */
-static struct rpc_t rpc_specimen;
-#define IP_PKTSIZE (CONFIG_NET_MAXDEFRAG + sizeof(rpc_specimen.u.reply))
+#define IP_PKTSIZE (CONFIG_NET_MAXDEFRAG)
 
 #define IP_MAXUDP (IP_PKTSIZE - IP_HDR_SIZE)
 

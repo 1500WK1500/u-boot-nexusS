@@ -13,7 +13,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DEFAULTENV_VARS
 #define CONFIG_CMD_IMMAP
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_JFFS2
@@ -42,7 +41,6 @@
 
 #define CONFIG_SYS_ALT_MEMTEST		/* memory test, takes time */
 
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE { 9600, 19200, 38400, 57600, 115200, 230400 }
 
 #define CONFIG_LOADS_ECHO
@@ -65,13 +63,10 @@
 #define CONFIG_BOOTP_HOSTNAME
 
 /* UBI Support for all Keymile boards */
-#define CONFIG_CMD_UBI
 #define CONFIG_RBTREE
 #define CONFIG_MTD_PARTITIONS
 #define CONFIG_MTD_DEVICE
 #define CONFIG_MTD_CONCAT
-
-#define CONFIG_CMD_CRAMFS
 
 #ifndef CONFIG_KM_DEF_ENV_BOOTPARAMS
 #define CONFIG_KM_DEF_ENV_BOOTPARAMS \
@@ -236,7 +231,5 @@
 	"mtdparts=" MTDPARTS_DEFAULT "\0"				\
 	""
 #endif /* CONFIG_KM_DEF_ENV */
-
-#define CONFIG_VERSION_VARIABLE	/* include version env variable */
 
 #endif /* __CONFIG_KEYMILE_H */

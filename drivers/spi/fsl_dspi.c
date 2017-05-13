@@ -594,7 +594,7 @@ static int fsl_dspi_claim_bus(struct udevice *dev)
 
 	priv = dev_get_priv(bus);
 
-	/* processor special prepartion work */
+	/* processor special preparation work */
 	cpu_dspi_claim_bus(bus->seq, slave_plat->cs);
 
 	/* configure transfer mode */
@@ -646,7 +646,7 @@ static int fsl_dspi_ofdata_to_platdata(struct udevice *bus)
 	fdt_addr_t addr;
 	struct fsl_dspi_platdata *plat = bus->platdata;
 	const void *blob = gd->fdt_blob;
-	int node = bus->of_offset;
+	int node = dev_of_offset(bus);
 
 	if (fdtdec_get_bool(blob, node, "big-endian"))
 		plat->flags |= DSPI_FLAG_REGMAP_ENDIAN_BIG;

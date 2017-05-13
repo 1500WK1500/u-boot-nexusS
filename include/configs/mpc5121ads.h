@@ -12,7 +12,6 @@
 #define __CONFIG_H
 
 #define CONFIG_MPC5121ADS 1
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Memory map for the MPC5121ADS board:
@@ -37,11 +36,6 @@
 /* video */
 #ifdef CONFIG_FSL_DIU_FB
 #define CONFIG_SYS_DIU_ADDR	(CONFIG_SYS_IMMR + 0x2100)
-#define CONFIG_VIDEO
-#define CONFIG_CMD_BMP
-#define CONFIG_CFB_CONSOLE
-#define CONFIG_VIDEO_SW_CURSOR
-#define CONFIG_VGA_AS_SINGLE_DEVICE
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_VIDEO_BMP_LOGO
 #endif
@@ -52,10 +46,8 @@
 #define CONFIG_SYS_MPC512X_CLKIN	66000000	/* in Hz */
 #else
 #define CONFIG_SYS_MPC512X_CLKIN	33333333	/* in Hz */
-#define CONFIG_PCI
 #endif
 
-#define CONFIG_BOARD_EARLY_INIT_F		/* call board_early_init_f() */
 #define CONFIG_MISC_INIT_R
 
 #define CONFIG_SYS_IMMR		0x80000000
@@ -281,7 +273,6 @@
 #if CONFIG_PSC_CONSOLE != 3
 #error CONFIG_PSC_CONSOLE must be 3
 #endif
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE  \
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400,115200}
 
@@ -331,8 +322,6 @@
 #define CONFIG_SYS_PCI_IO_BASE		0x00000000
 #define CONFIG_SYS_PCI_IO_PHYS		0x84000000
 #define CONFIG_SYS_PCI_IO_SIZE		0x01000000	/* 16M */
-
-#define CONFIG_PCI_PNP			/* do pci plug-and-play */
 
 #define CONFIG_PCI_SCAN_SHOW		/* show pci devices on startup */
 
@@ -385,7 +374,6 @@
 #define CONFIG_EHCI_MMIO_BIG_ENDIAN		/* With big-endian regs	*/
 #define CONFIG_EHCI_DESC_BIG_ENDIAN
 #define CONFIG_EHCI_IS_TDI
-#define CONFIG_USB_STORAGE
 #endif
 
 /*
@@ -408,7 +396,6 @@
 #define CONFIG_LOADS_ECHO	1	/* echo on for serial download */
 #define CONFIG_SYS_LOADS_BAUD_CHANGE	1	/* allow baudrate change */
 
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IDE
 #define CONFIG_CMD_JFFS2
@@ -447,11 +434,6 @@
 					"mpc5121.nand:-(data)"
 
 #if defined(CONFIG_CMD_IDE) || defined(CONFIG_CMD_EXT2) || defined(CONFIG_CMD_USB)
-
-#define CONFIG_DOS_PARTITION
-#define CONFIG_MAC_PARTITION
-#define CONFIG_ISO_PARTITION
-
 #define CONFIG_SUPPORT_VFAT
 
 #endif /* defined(CONFIG_CMD_IDE) */
@@ -517,8 +499,6 @@
 #define CONFIG_LOADADDR		400000	/* default location for tftp and bootm */
 
 #undef  CONFIG_BOOTARGS			/* the boot command will set bootargs */
-
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_PREBOOT	"echo;"	\
 	"echo Type \\\"run flash_nfs\\\" to mount root filesystem over NFS;" \

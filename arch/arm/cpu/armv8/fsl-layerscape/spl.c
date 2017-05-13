@@ -8,7 +8,6 @@
 #include <spl.h>
 #include <asm/io.h>
 #include <fsl_ifc.h>
-#include <fsl_csu.h>
 #include <i2c.h>
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -42,16 +41,31 @@ u32 spl_boot_mode(const u32 boot_device)
 }
 
 #ifdef CONFIG_SPL_BUILD
+
+void spl_board_init(void)
+{
+#if defined(CONFIG_SECURE_BOOT) && defined(CONFIG_FSL_LSCH2)
+	/*
+	 * In case of Secure Boot, the IBR configures the SMMU
+	 * to allow only Secure transactions.
+	 * SMMU must be reset in bypass mode.
+	 * Set the ClientPD bit and Clear the USFCFG Bit
+	*/
+	u32 val;
+	val = (in_le32(SMMU_SCR0) | SCR0_CLIENTPD_MASK) & ~(SCR0_USFCFG_MASK);
+	out_le32(SMMU_SCR0, val);
+	val = (in_le32(SMMU_NSCR0) | SCR0_CLIENTPD_MASK) & ~(SCR0_USFCFG_MASK);
+	out_le32(SMMU_NSCR0, val);
+#endif
+}
+
 void board_init_f(ulong dummy)
 {
 	/* Clear global data */
 	memset((void *)gd, 0, sizeof(gd_t));
-#ifdef CONFIG_LS2080A
-	arch_cpu_init();
-#endif
 	board_early_init_f();
 	timer_init();
-#ifdef CONFIG_LS2080A
+#ifdef CONFIG_ARCH_LS2080A
 	env_init();
 #endif
 	get_clocks();
@@ -62,13 +76,5 @@ void board_init_f(ulong dummy)
 	i2c_init_all();
 #endif
 	dram_init();
-
-	/* Clear the BSS */
-	memset(__bss_start, 0, __bss_end - __bss_start);
-
-#ifdef CONFIG_LAYERSCAPE_NS_ACCESS
-	enable_layerscape_ns_access();
-#endif
-	board_init_r(NULL, 0);
 }
 #endif

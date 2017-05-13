@@ -108,23 +108,27 @@ int spi_xfer(struct spi_slave *slave, unsigned int bitlen,
 	return dm_spi_xfer(slave->dev, bitlen, dout, din, flags);
 }
 
+#if !CONFIG_IS_ENABLED(OF_PLATDATA)
 static int spi_child_post_bind(struct udevice *dev)
 {
 	struct dm_spi_slave_platdata *plat = dev_get_parent_platdata(dev);
 
-	if (dev->of_offset == -1)
+	if (dev_of_offset(dev) == -1)
 		return 0;
 
-	return spi_slave_ofdata_to_platdata(gd->fdt_blob, dev->of_offset, plat);
+	return spi_slave_ofdata_to_platdata(gd->fdt_blob, dev_of_offset(dev),
+					    plat);
 }
+#endif
 
 static int spi_post_probe(struct udevice *bus)
 {
+#if !CONFIG_IS_ENABLED(OF_PLATDATA)
 	struct dm_spi_bus *spi = dev_get_uclass_priv(bus);
 
-	spi->max_hz = fdtdec_get_int(gd->fdt_blob, bus->of_offset,
+	spi->max_hz = fdtdec_get_int(gd->fdt_blob, dev_of_offset(bus),
 				     "spi-max-frequency", 0);
-
+#endif
 #if defined(CONFIG_NEEDS_MANUAL_RELOC)
 	struct dm_spi_ops *ops = spi_get_ops(bus);
 
@@ -164,7 +168,6 @@ static int spi_child_pre_probe(struct udevice *dev)
 
 	slave->max_hz = plat->max_hz;
 	slave->mode = plat->mode;
-	slave->mode_rx = plat->mode_rx;
 	slave->wordlen = SPI_DEFAULT_WORDLEN;
 
 	return 0;
@@ -275,7 +278,11 @@ int spi_get_bus_and_cs(int busnum, int cs, int speed, int mode,
 	bool created = false;
 	int ret;
 
+#if CONFIG_IS_ENABLED(OF_PLATDATA)
+	ret = uclass_first_device_err(UCLASS_SPI, &bus);
+#else
 	ret = uclass_get_device_by_seq(UCLASS_SPI, busnum, &bus);
+#endif
 	if (ret) {
 		printf("Invalid bus %d (err=%d)\n", busnum, ret);
 		return ret;
@@ -291,8 +298,11 @@ int spi_get_bus_and_cs(int busnum, int cs, int speed, int mode,
 		debug("%s: Binding new device '%s', busnum=%d, cs=%d, driver=%s\n",
 		      __func__, dev_name, busnum, cs, drv_name);
 		ret = device_bind_driver(bus, drv_name, dev_name, &dev);
-		if (ret)
+		if (ret) {
+			debug("%s: Unable to bind driver (ret=%d)\n", __func__,
+			      ret);
 			return ret;
+		}
 		plat = dev_get_parent_platdata(dev);
 		plat->cs = cs;
 		plat->max_hz = speed;
@@ -333,7 +343,7 @@ err:
 	debug("%s: Error path, created=%d, device '%s'\n", __func__,
 	      created, dev->name);
 	if (created) {
-		device_remove(dev);
+		device_remove(dev, DM_REMOVE_NORMAL);
 		device_unbind(dev);
 	}
 
@@ -374,14 +384,14 @@ struct spi_slave *spi_setup_slave(unsigned int busnum, unsigned int cs,
 
 void spi_free_slave(struct spi_slave *slave)
 {
-	device_remove(slave->dev);
+	device_remove(slave->dev, DM_REMOVE_NORMAL);
 	slave->dev = NULL;
 }
 
 int spi_slave_ofdata_to_platdata(const void *blob, int node,
 				 struct dm_spi_slave_platdata *plat)
 {
-	int mode = 0, mode_rx = 0;
+	int mode = 0;
 	int value;
 
 	plat->cs = fdtdec_get_int(blob, node, "reg", -1);
@@ -409,28 +419,26 @@ int spi_slave_ofdata_to_platdata(const void *blob, int node,
 		mode |= SPI_TX_QUAD;
 		break;
 	default:
-		error("spi-tx-bus-width %d not supported\n", value);
+		warn_non_spl("spi-tx-bus-width %d not supported\n", value);
 		break;
 	}
-
-	plat->mode = mode;
 
 	value = fdtdec_get_uint(blob, node, "spi-rx-bus-width", 1);
 	switch (value) {
 	case 1:
 		break;
 	case 2:
-		mode_rx |= SPI_RX_DUAL;
+		mode |= SPI_RX_DUAL;
 		break;
 	case 4:
-		mode_rx |= SPI_RX_QUAD;
+		mode |= SPI_RX_QUAD;
 		break;
 	default:
-		error("spi-rx-bus-width %d not supported\n", value);
+		warn_non_spl("spi-rx-bus-width %d not supported\n", value);
 		break;
 	}
 
-	plat->mode_rx = mode_rx;
+	plat->mode = mode;
 
 	return 0;
 }
@@ -439,14 +447,18 @@ UCLASS_DRIVER(spi) = {
 	.id		= UCLASS_SPI,
 	.name		= "spi",
 	.flags		= DM_UC_FLAG_SEQ_ALIAS,
+#if !CONFIG_IS_ENABLED(OF_PLATDATA)
 	.post_bind	= dm_scan_fdt_dev,
+#endif
 	.post_probe	= spi_post_probe,
 	.child_pre_probe = spi_child_pre_probe,
 	.per_device_auto_alloc_size = sizeof(struct dm_spi_bus),
 	.per_child_auto_alloc_size = sizeof(struct spi_slave),
 	.per_child_platdata_auto_alloc_size =
 			sizeof(struct dm_spi_slave_platdata),
+#if !CONFIG_IS_ENABLED(OF_PLATDATA)
 	.child_post_bind = spi_child_post_bind,
+#endif
 };
 
 UCLASS_DRIVER(spi_generic) = {

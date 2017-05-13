@@ -25,8 +25,6 @@
 #define	CONFIG_5xx_CONS_SCI1
 #undef	CONFIG_5xx_CONS_SCI2
 
-#define CONFIG_BAUDRATE		9600
-
 /*
  * BOOTP options
  */
@@ -40,7 +38,6 @@
  */
 #define CONFIG_CMD_REGINFO
 #define CONFIG_CMD_REGINFO
-#define CONFIG_CMD_BSP
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IRQ
 
@@ -50,14 +47,11 @@
 
 #define CONFIG_WATCHDOG				/* turn on platform specific watchdog	*/
 
-/*#define CONFIG_STATUS_LED	1		*/ /* Enable status led */
-
 #define CONFIG_LOADS_ECHO	1		/* Echo on for serial download */
 
 /*
  * Miscellaneous configurable options
  */
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV	/* stdin, stdout and stderr are in evironment */
 #define CONFIG_PREBOOT
 
 #define	CONFIG_SYS_LONGHELP				/* undef to save memory		*/
@@ -76,8 +70,6 @@
 #define	CONFIG_SYS_LOAD_ADDR		0x100000	/* default load address		*/
 
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 1250000 }
-
-#define CONFIG_BOARD_EARLY_INIT_F
 
 /***********************************************************************
  * Last Stage Init
@@ -251,10 +243,5 @@
  * Initialise to zero
  */
 #define CONFIG_SYS_DER			0x00000000
-
-#define VERSION_TAG "released"
-#define CONFIG_ISO_STRING "MEV-10084-001"
-
-#define CONFIG_IDENT_STRING "\n(c) 2003 by MPL AG Switzerland, " CONFIG_ISO_STRING " " VERSION_TAG
 
 #endif	/* __CONFIG_H */

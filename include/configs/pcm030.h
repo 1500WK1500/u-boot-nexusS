@@ -44,13 +44,11 @@ Serial console configuration
 					/*define gps port conf. */
 					/* register later on to */
 					/*enable UART function! */
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE { 9600, 19200, 38400, 57600, 115200, 230400 }
 
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_PCI
@@ -113,8 +111,6 @@ IPB Bus clocking configuration.
  * 0x40000000 - 0x4fffffff - PCI Memory
  * 0x50000000 - 0x50ffffff - PCI IO Space
  * -----------------------------------------------------------------------*/
-#define CONFIG_PCI			1
-#define CONFIG_PCI_PNP			1
 #define CONFIG_PCI_SCAN_SHOW		1
 #define CONFIG_PCI_MEM_BUS		0x40000000
 #define CONFIG_PCI_MEM_PHYS		CONFIG_PCI_MEM_BUS
@@ -350,8 +346,6 @@ RTC configuration
 
 #define CONFIG_SYS_LOAD_ADDR 0x400000 /* default load address */
 
-#define CONFIG_DISPLAY_BOARDINFO 1
-
 /*-----------------------------------------------------------------------------
  Various low-level settings
 -----------------------------------------------------------------------------*/
@@ -400,12 +394,8 @@ RTC configuration
 #define CONFIG_SYS_ATA_STRIDE		4
 #define CONFIG_ATAPI			1
 
-/* we enable IDE and FAT support, so we also need partition support */
-#define CONFIG_DOS_PARTITION 1
-
 /* USB */
 #define CONFIG_USB_OHCI
-#define CONFIG_USB_STORAGE
 
 /* pass open firmware flat tree */
 #define OF_CPU				"PowerPC,5200@0"

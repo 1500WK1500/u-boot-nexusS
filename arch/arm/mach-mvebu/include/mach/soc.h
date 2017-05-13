@@ -31,13 +31,10 @@
 #define CONFIG_SYS_TCLK		250000000	/* 250MHz */
 #endif
 
-/* Armada XP PLL frequency (used for NAND clock generation) */
-#define CONFIG_SYS_MVEBU_PLL_CLOCK	2000000000
-
 /* SOC specific definations */
 #define INTREG_BASE		0xd0000000
 #define INTREG_BASE_ADDR_REG	(INTREG_BASE + 0x20080)
-#if defined(CONFIG_SPL_BUILD)
+#if defined(CONFIG_SPL_BUILD) || defined(CONFIG_ARMADA_3700)
 /*
  * The SPL U-Boot version still runs with the default
  * address for the internal registers, configured by
@@ -46,6 +43,8 @@
  * required for the Linux kernel.
  */
 #define SOC_REGS_PHY_BASE	0xd0000000
+#elif defined(CONFIG_ARMADA_8K)
+#define SOC_REGS_PHY_BASE	0xf0000000
 #else
 #define SOC_REGS_PHY_BASE	0xf1000000
 #endif
@@ -68,11 +67,13 @@
 #define MVEBU_REG_PCIE_BASE	(MVEBU_REGISTER(0x40000))
 #define MVEBU_AXP_USB_BASE      (MVEBU_REGISTER(0x50000))
 #define MVEBU_USB20_BASE	(MVEBU_REGISTER(0x58000))
+#define MVEBU_REG_PCIE0_BASE	(MVEBU_REGISTER(0x80000))
 #define MVEBU_AXP_SATA_BASE	(MVEBU_REGISTER(0xa0000))
 #define MVEBU_SATA0_BASE	(MVEBU_REGISTER(0xa8000))
 #define MVEBU_NAND_BASE		(MVEBU_REGISTER(0xd0000))
 #define MVEBU_SDIO_BASE		(MVEBU_REGISTER(0xd8000))
 #define MVEBU_LCD_BASE		(MVEBU_REGISTER(0xe0000))
+#define MVEBU_DFX_BASE		(MVEBU_REGISTER(0xe4000))
 
 #define SOC_COHERENCY_FABRIC_CTRL_REG	(MVEBU_REGISTER(0x20200))
 #define MBUS_ERR_PROP_EN	(1 << 8)
@@ -92,6 +93,7 @@
 #define SPI_PUP_EN		BIT(5)
 
 #define MVEBU_CORE_DIV_CLK_CTRL(i)	(MVEBU_CLOCK_BASE + ((i) * 0x8))
+#define MVEBU_DFX_DIV_CLK_CTRL(i)	(MVEBU_DFX_BASE + 0x250 + ((i) * 0x4))
 #define NAND_ECC_DIVCKL_RATIO_OFFS	8
 #define NAND_ECC_DIVCKL_RATIO_MASK	(0x3F << NAND_ECC_DIVCKL_RATIO_OFFS)
 

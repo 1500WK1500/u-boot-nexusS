@@ -22,7 +22,6 @@
 
 #define CONFIG_MPC885		1	/* This is a MPC885 CPU		*/
 #define CONFIG_TQM885D		1	/* ...on a TQM88D module	*/
-#define CONFIG_DISPLAY_BOARDINFO
 
 #define	CONFIG_SYS_TEXT_BASE	0x40000000
 
@@ -36,7 +35,6 @@
 #define CONFIG_8xx_CONS_SMC1	1	/* Console is on SMC1		*/
 #define CONFIG_SYS_SMC_RXBUFLEN	128
 #define CONFIG_SYS_MAXIDLE	10
-#define CONFIG_BAUDRATE		115200	/* console baudrate = 115kbps	*/
 
 #define CONFIG_BOOTCOUNT_LIMIT
 
@@ -80,8 +78,6 @@
 
 #undef	CONFIG_WATCHDOG			/* watchdog disabled		*/
 
-#define CONFIG_STATUS_LED	1	/* Status LED enabled		*/
-
 #undef	CONFIG_CAN_DRIVER		/* CAN Driver support disabled	*/
 
 /* enable I2C and select the hardware/software driver */
@@ -122,9 +118,6 @@
 #define CONFIG_BOOTP_BOOTPATH
 #define CONFIG_BOOTP_BOOTFILESIZE
 
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-
 #undef CONFIG_RTC_MPC8xx		/* MPC885 does not support RTC	*/
 
 #define	CONFIG_TIMESTAMP		/* but print image timestmps	*/
@@ -132,7 +125,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IDE
 

@@ -10,18 +10,11 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_SYS_CACHELINE_SIZE	64
-
 /*
  * High Level Configuration Options
  */
 #define CONFIG_OMAP	/* in a TI OMAP core */
 #define CONFIG_CM_T3517	/* working with CM-T3517 */
-#define CONFIG_OMAP_COMMON
-/* Common ARM Erratas */
-#define CONFIG_ARM_ERRATA_454179
-#define CONFIG_ARM_ERRATA_430973
-#define CONFIG_ARM_ERRATA_621766
 
 #define CONFIG_SYS_TEXT_BASE	0x80008000
 
@@ -30,7 +23,6 @@
  * Although the default iss 64, we still define it
  * to be on the safe side once the default is changed.
  */
-#define CONFIG_SYS_CACHELINE_SIZE	64
 
 #define CONFIG_EMIF4	/* The chip has EMIF4 controller */
 
@@ -38,12 +30,6 @@
 #include <asm/arch/omap.h>
 
 #define CONFIG_MACH_TYPE                MACH_TYPE_CM_T3517
-
-/*
- * Display CPU and Board information
- */
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DISPLAY_BOARDINFO
 
 /* Clock Defines */
 #define V_OSCK			26000000	/* Clock output from T2 */
@@ -88,20 +74,13 @@
 #define CONFIG_CONS_INDEX		3
 #define CONFIG_SYS_NS16550_COM3		OMAP34XX_UART3
 #define CONFIG_SERIAL3			3	/* UART3 */
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{4800, 9600, 19200, 38400, 57600,\
 					115200}
 
 #define CONFIG_OMAP_GPIO
-
-#define CONFIG_GENERIC_MMC
-#define CONFIG_MMC
-#define CONFIG_OMAP_HSMMC
-#define CONFIG_DOS_PARTITION
 
 /* USB */
 #define CONFIG_USB_MUSB_AM35X
@@ -116,8 +95,6 @@
 #define CONFIG_USB_MUSB_PIO_ONLY
 #endif /* CONFIG_USB_MUSB_AM35X */
 
-#define CONFIG_USB_STORAGE
-
 /* commands to include */
 #define CONFIG_CMD_MTDPARTS	/* Enable MTD parts commands */
 #define CONFIG_MTD_DEVICE	/* needed for mtdparts commands */
@@ -129,7 +106,6 @@
 
 #define CONFIG_CMD_NAND		/* NAND support			*/
 
-#define CONFIG_SYS_NO_FLASH
 #define CONFIG_SYS_I2C
 #define CONFIG_SYS_OMAP24_I2C_SPEED	400000
 #define CONFIG_SYS_OMAP24_I2C_SLAVE	1
@@ -272,18 +248,10 @@
 					 GENERATED_GBL_DATA_SIZE)
 
 /* Status LED */
-#define CONFIG_STATUS_LED		/* Status LED enabled */
-#define CONFIG_BOARD_SPECIFIC_LED
-#define CONFIG_GPIO_LED
 #define GREEN_LED_GPIO			186 /* CM-T3517 Green LED is GPIO186 */
-#define GREEN_LED_DEV			0
-#define STATUS_LED_BIT			GREEN_LED_GPIO
-#define STATUS_LED_STATE		STATUS_LED_ON
-#define STATUS_LED_PERIOD		(CONFIG_SYS_HZ / 2)
-#define STATUS_LED_BOOT			GREEN_LED_DEV
 
 /* GPIO banks */
-#ifdef CONFIG_STATUS_LED
+#ifdef CONFIG_LED_STATUS
 #define CONFIG_OMAP3_GPIO_6	/* GPIO186 is in GPIO bank 6  */
 #endif
 
@@ -293,10 +261,8 @@
 #define CONFIG_VIDEO_OMAP3
 #define LCD_BPP		LCD_COLOR16
 
-#define CONFIG_LCD
 #define CONFIG_SPLASH_SCREEN
 #define CONFIG_SPLASHIMAGE_GUARD
-#define CONFIG_CMD_BMP
 #define CONFIG_BMP_16BPP
 #define CONFIG_SCF0403_LCD
 

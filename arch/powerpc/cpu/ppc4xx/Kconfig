@@ -104,6 +104,9 @@ config TARGET_ICON
 config TARGET_MIP405
 	bool "Support MIP405"
 
+config TARGET_MIP405T
+	bool "Support MIP405T"
+
 config TARGET_PIP405
 	bool "Support PIP405"
 
@@ -125,6 +128,14 @@ config TARGET_XILINX_PPC440_GENERIC
 	select DM_SERIAL
 
 endchoice
+
+config CMD_CHIP_CONFIG
+	bool "Enable the 'chip_config' command"
+	help
+	  This command programs the I2C bootstrap EEPROM or shows a list of
+	  possible configurations. The configurations are board-specific
+	  and control the CPU and peripehrals clocks. The programmed
+	  configuration is then used when the board boots.
 
 source "board/amcc/acadia/Kconfig"
 source "board/amcc/bamboo/Kconfig"

@@ -1456,8 +1456,8 @@ static int cfi_protect_bugfix(flash_info_t *info, long sector, int prot)
 				cmd = FLASH_CMD_PROTECT_SET;
 			else
 				cmd = FLASH_CMD_PROTECT_CLEAR;
-				flash_write_cmd(info, sector, 0,
-					  FLASH_CMD_PROTECT);
+
+			flash_write_cmd(info, sector, 0, FLASH_CMD_PROTECT);
 			flash_write_cmd(info, sector, 0, cmd);
 			/* re-enable interrupts if necessary */
 			if (flag)
@@ -2441,7 +2441,7 @@ unsigned long flash_init (void)
 static int cfi_flash_probe(struct udevice *dev)
 {
 	void *blob = (void *)gd->fdt_blob;
-	int node = dev->of_offset;
+	int node = dev_of_offset(dev);
 	const fdt32_t *cell;
 	phys_addr_t addr;
 	int parent, addrc, sizec;

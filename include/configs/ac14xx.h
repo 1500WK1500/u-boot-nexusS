@@ -13,7 +13,6 @@
 #define __CONFIG_H
 
 #define CONFIG_AC14XX 1
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Memory map for the ifm AC14xx board:
@@ -31,11 +30,6 @@
 #define CONFIG_E300		1	/* E300 Family */
 
 #define CONFIG_SYS_TEXT_BASE	0xFFF00000
-
-#if defined(CONFIG_VIDEO)
-#define CONFIG_CFB_CONSOLE
-#define CONFIG_VGA_AS_SINGLE_DEVICE
-#endif
 
 #define CONFIG_SYS_MPC512X_CLKIN	25000000	/* in Hz */
 #define SCFR1_IPS_DIV			2
@@ -318,8 +312,6 @@
 #error CONFIG_PSC_CONSOLE must be 3
 #endif
 
-#define CONFIG_BAUDRATE			115200	/* ... at 115200 bps */
-
 #define CONSOLE_FIFO_TX_SIZE		FIFOC_PSC3_TX_SIZE
 #define CONSOLE_FIFO_TX_ADDR		FIFOC_PSC3_TX_ADDR
 #define CONSOLE_FIFO_RX_SIZE		FIFOC_PSC3_RX_SIZE
@@ -401,12 +393,6 @@
 #if defined(CONFIG_PCI)
 #define CONFIG_CMD_PCI
 #endif
-
-#if defined(CONFIG_CMD_IDE) || defined(CONFIG_CMD_EXT2)
-#define CONFIG_DOS_PARTITION
-#define CONFIG_MAC_PARTITION
-#define CONFIG_ISO_PARTITION
-#endif /* defined(CONFIG_CMD_IDE) */
 
 /*
  * Miscellaneous configurable options

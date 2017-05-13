@@ -10,11 +10,12 @@
 #ifndef __R7780RP_H
 #define __R7780RP_H
 
-#undef DEBUG
 #define CONFIG_CPU_SH7780	1
 #define CONFIG_R7780MP		1
 #define CONFIG_SYS_R7780MP_OLD_FLASH	1
 #define __LITTLE_ENDIAN__ 1
+
+#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Command line configuration.
@@ -22,10 +23,8 @@
 #define CONFIG_CMD_SDRAM
 #define CONFIG_CMD_PCI
 #define CONFIG_CMD_IDE
-#define CONFIG_DOS_PARTITION
 
 #define CONFIG_SCIF_CONSOLE	1
-#define CONFIG_BAUDRATE		115200
 #define CONFIG_CONS_SCIF0	1
 
 #define CONFIG_BOOTARGS		"console=ttySC0,115200"
@@ -94,15 +93,12 @@
 
 /* PCI Controller */
 #if defined(CONFIG_CMD_PCI)
-#define CONFIG_PCI
 #define CONFIG_SH4_PCI
 #define CONFIG_SH7780_PCI
 #define CONFIG_SH7780_PCI_LSR	0x07f00001
 #define CONFIG_SH7780_PCI_LAR	CONFIG_SYS_SDRAM_SIZE
 #define CONFIG_SH7780_PCI_BAR	CONFIG_SYS_SDRAM_SIZE
-#define CONFIG_PCI_PNP
 #define CONFIG_PCI_SCAN_SHOW	1
-#define __io
 #define __mem_pci
 
 #define CONFIG_PCI_MEM_BUS	0xFD000000	/* Memory space base addr */

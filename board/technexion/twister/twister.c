@@ -130,7 +130,7 @@ int board_eth_init(bd_t *bis)
 	return 0;
 }
 
-#if defined(CONFIG_OMAP_HSMMC) && \
+#if defined(CONFIG_MMC_OMAP_HS) && \
 	!defined(CONFIG_SPL_BUILD)
 int board_mmc_init(bd_t *bis)
 {
@@ -140,7 +140,7 @@ int board_mmc_init(bd_t *bis)
 
 #ifdef CONFIG_SPL_OS_BOOT
 /*
- * Do board specific preperation before SPL
+ * Do board specific preparation before SPL
  * Linux boot
  */
 void spl_board_prepare_for_linux(void)

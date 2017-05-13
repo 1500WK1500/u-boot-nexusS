@@ -13,11 +13,13 @@
 #include <hwconfig.h>
 #include <fdt_support.h>
 #include <libfdt.h>
-#include <fsl_debug_server.h>
 #include <fsl-mc/fsl_mc.h>
 #include <environment.h>
+#include <efi_loader.h>
 #include <i2c.h>
+#include <asm/arch/mmu.h>
 #include <asm/arch/soc.h>
+#include <asm/arch/ppa.h>
 #include <fsl_sec.h>
 
 #include "../common/qixis.h"
@@ -180,9 +182,16 @@ int board_init(void)
 
 	QIXIS_WRITE(rst_ctl, QIXIS_RST_CTL_RESET_EN);
 
+#ifdef CONFIG_FSL_LS_PPA
+	ppa_init();
+#endif
+
 #ifdef CONFIG_FSL_MC_ENET
 	/* invert AQR405 IRQ pins polarity */
 	out_le32(irq_ccsr + IRQCR_OFFSET / 4, AQR405_IRQ_MASK);
+#endif
+#ifdef CONFIG_FSL_CAAM
+	sec_init();
 #endif
 
 	return 0;
@@ -219,22 +228,9 @@ void detail_board_ddr_info(void)
 #endif
 }
 
-int dram_init(void)
-{
-	gd->ram_size = initdram(0);
-
-	return 0;
-}
-
 #if defined(CONFIG_ARCH_MISC_INIT)
 int arch_misc_init(void)
 {
-#ifdef CONFIG_FSL_DEBUG_SERVER
-	debug_server_init();
-#endif
-#ifdef CONFIG_FSL_CAAM
-	sec_init();
-#endif
 	return 0;
 }
 #endif
@@ -260,14 +256,16 @@ void fdt_fixup_board_enet(void *fdt)
 	else
 		fdt_status_fail(fdt, offset);
 }
+
+void board_quiesce_devices(void)
+{
+	fsl_mc_ldpaa_exit(gd->bd);
+}
 #endif
 
 #ifdef CONFIG_OF_BOARD_SETUP
 int ft_board_setup(void *blob, bd_t *bd)
 {
-#ifdef CONFIG_FSL_MC_ENET
-	int err;
-#endif
 	u64 base[CONFIG_NR_DRAM_BANKS];
 	u64 size[CONFIG_NR_DRAM_BANKS];
 
@@ -279,15 +277,22 @@ int ft_board_setup(void *blob, bd_t *bd)
 	base[1] = gd->bd->bi_dram[1].start;
 	size[1] = gd->bd->bi_dram[1].size;
 
+#ifdef CONFIG_RESV_RAM
+	/* reduce size if reserved memory is within this bank */
+	if (gd->arch.resv_ram >= base[0] &&
+	    gd->arch.resv_ram < base[0] + size[0])
+		size[0] = gd->arch.resv_ram - base[0];
+	else if (gd->arch.resv_ram >= base[1] &&
+		 gd->arch.resv_ram < base[1] + size[1])
+		size[1] = gd->arch.resv_ram - base[1];
+#endif
+
 	fdt_fixup_memory_banks(blob, base, size, 2);
 
-	fdt_fixup_dr_usb(blob, bd);
+	fsl_fdt_fixup_dr_usb(blob, bd);
 
 #ifdef CONFIG_FSL_MC_ENET
 	fdt_fixup_board_enet(blob);
-	err = fsl_mc_ldpaa_exit(bd);
-	if (err)
-		return err;
 #endif
 
 	return 0;

@@ -61,7 +61,7 @@ static int ehci_fsl_ofdata_to_platdata(struct udevice *dev)
 	struct ehci_fsl_priv *priv = dev_get_priv(dev);
 	const void *prop;
 
-	prop = fdt_getprop(gd->fdt_blob, dev->of_offset, "phy_type",
+	prop = fdt_getprop(gd->fdt_blob, dev_of_offset(dev), "phy_type",
 			   NULL);
 	if (prop) {
 		priv->phy_type = (char *)prop;
@@ -118,17 +118,6 @@ static int ehci_fsl_probe(struct udevice *dev)
 	return ehci_register(dev, hccr, hcor, &fsl_ehci_ops, 0, USB_INIT_HOST);
 }
 
-static int ehci_fsl_remove(struct udevice *dev)
-{
-	int ret;
-
-	ret = ehci_deregister(dev);
-	if (ret)
-		return ret;
-
-	return 0;
-}
-
 static const struct udevice_id ehci_usb_ids[] = {
 	{ .compatible = "fsl-usb2-mph", },
 	{ .compatible = "fsl-usb2-dr", },
@@ -141,7 +130,7 @@ U_BOOT_DRIVER(ehci_fsl) = {
 	.of_match = ehci_usb_ids,
 	.ofdata_to_platdata = ehci_fsl_ofdata_to_platdata,
 	.probe = ehci_fsl_probe,
-	.remove = ehci_fsl_remove,
+	.remove = ehci_deregister,
 	.ops	= &ehci_usb_ops,
 	.platdata_auto_alloc_size = sizeof(struct usb_platdata),
 	.priv_auto_alloc_size = sizeof(struct ehci_fsl_priv),

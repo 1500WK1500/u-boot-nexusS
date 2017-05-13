@@ -211,7 +211,7 @@ void set_muxconf_regs(void)
 		   sizeof(struct pad_conf_entry));
 }
 
-#if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_GENERIC_MMC)
+#if defined(CONFIG_GENERIC_MMC)
 int board_mmc_init(bd_t *bis)
 {
 	omap_mmc_init(0, 0, 0, -1, -1);
@@ -245,10 +245,7 @@ int ehci_hcd_init(int index, enum usb_init_type init,
 
 int ehci_hcd_stop(void)
 {
-	int ret;
-
-	ret = omap_ehci_hcd_stop();
-	return ret;
+	return omap_ehci_hcd_stop();
 }
 
 void usb_hub_reset_devices(int port)

@@ -19,7 +19,6 @@
 #define CONFIG_MPC5200		1	/* This is an MPC5200 CPU		*/
 #define CONFIG_TQM5200		1	/* ... on TQM5200 module		*/
 #undef CONFIG_TQM5200_REV100		/*  define for revision 100 modules	*/
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Valid values for CONFIG_SYS_TEXT_BASE are:
@@ -46,14 +45,11 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1			*/
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps			*/
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 #define CONFIG_BOOTCOUNT_LIMIT	1
 
 #ifdef CONFIG_FO300
 #define CONFIG_SYS_DEVICE_NULLDEV		1	/* enable null device */
-#define CONFIG_SILENT_CONSOLE		1	/* enable silent startup */
-#define CONFIG_BOARD_EARLY_INIT_F	1	/* used to detect S1 switch position */
 #define CONFIG_USB_BIN_FIXUP		1	/* for a buggy USB device */
 #if 0
 #define FO300_SILENT_CONSOLE_WHEN_S1_CLOSED	1	/* silent console on PSC1 when S1 */
@@ -78,8 +74,6 @@
  * 0x50000000 - 0x50ffffff - PCI IO Space
  */
 #if defined(CONFIG_CHARON) || defined(CONFIG_STK52XX)
-#define CONFIG_PCI		1
-#define CONFIG_PCI_PNP		1
 /* #define CONFIG_PCI_SCAN_SHOW	1 */
 
 #define CONFIG_PCI_MEM_BUS	0x40000000
@@ -99,35 +93,25 @@
  * Video console
  */
 #ifndef CONFIG_TQM5200S		/* No graphics controller on TQM5200S */
-#define CONFIG_VIDEO
 #define CONFIG_VIDEO_SM501
 #define CONFIG_VIDEO_SM501_32BPP
-#define CONFIG_CFB_CONSOLE
 #define CONFIG_VIDEO_LOGO
 
 #ifndef CONFIG_FO300
-#define CONFIG_CONSOLE_EXTRA_INFO
 #else
 #define CONFIG_VIDEO_BMP_LOGO
 #endif
 
-#define CONFIG_VGA_AS_SINGLE_DEVICE
-#define CONFIG_VIDEO_SW_CURSOR
 #define CONFIG_SPLASH_SCREEN
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
 #endif /* #ifndef CONFIG_TQM5200S */
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 /* USB */
 #if defined(CONFIG_CHARON) || defined(CONFIG_FO300) || \
     defined(CONFIG_STK52XX)
 #define CONFIG_USB_OHCI_NEW
 #define CONFIG_SYS_OHCI_BE_CONTROLLER
-#define CONFIG_USB_STORAGE
 
 #undef CONFIG_SYS_USB_OHCI_BOARD_INIT
 #define CONFIG_SYS_USB_OHCI_CPU_INIT
@@ -160,15 +144,9 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_REGINFO
-#define CONFIG_CMD_BSP
-
-#ifdef CONFIG_VIDEO
-    #define CONFIG_CMD_BMP
-#endif
 
 #ifdef CONFIG_PCI
 #define CONFIG_CMD_PCI
@@ -184,10 +162,6 @@
 	defined(CONFIG_STK52XX)
     #define CONFIG_CFG_USB
     #define CONFIG_CFG_FAT
-#endif
-
-#ifdef CONFIG_POST
-    #define CONFIG_CMD_DIAG
 #endif
 
 #define	CONFIG_TIMESTAMP		/* display image timestamps */

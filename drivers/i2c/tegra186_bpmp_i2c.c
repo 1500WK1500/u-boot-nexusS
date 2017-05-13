@@ -89,18 +89,8 @@ static int tegra186_bpmp_i2c_xfer(struct udevice *dev, struct i2c_msg *msg,
 static int tegra186_bpmp_i2c_probe(struct udevice *dev)
 {
 	struct tegra186_bpmp_i2c *priv = dev_get_priv(dev);
-	int ret;
-	struct fdtdec_phandle_args args;
 
-	ret = fdtdec_parse_phandle_with_args(gd->fdt_blob, dev->of_offset,
-					     "nvidia,bpmp", NULL, 0, 0, &args);
-	if (ret < 0) {
-		debug("%s: fdtdec_parse_phandle_with_args() failed: %d\n",
-		      __func__, ret);
-		return ret;
-	}
-
-	priv->bpmp_bus_id = fdtdec_get_uint(gd->fdt_blob, dev->of_offset,
+	priv->bpmp_bus_id = fdtdec_get_uint(gd->fdt_blob, dev_of_offset(dev),
 					    "nvidia,bpmp-bus-id", U32_MAX);
 	if (priv->bpmp_bus_id == U32_MAX) {
 		debug("%s: could not parse nvidia,bpmp-bus-id\n", __func__);

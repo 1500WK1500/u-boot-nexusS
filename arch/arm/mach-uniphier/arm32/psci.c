@@ -28,13 +28,13 @@ u32 uniphier_smp_booted[CONFIG_ARMV7_PSCI_NR_CPUS];
 
 static int uniphier_get_nr_cpus(void)
 {
-	switch (uniphier_get_soc_type()) {
-	case SOC_UNIPHIER_SLD3:
-	case SOC_UNIPHIER_PRO4:
-	case SOC_UNIPHIER_PRO5:
+	switch (uniphier_get_soc_id()) {
+	case UNIPHIER_SLD3_ID:
+	case UNIPHIER_PRO4_ID:
+	case UNIPHIER_PRO5_ID:
 		return 2;
-	case SOC_UNIPHIER_PXS2:
-	case SOC_UNIPHIER_LD6B:
+	case UNIPHIER_PXS2_ID:
+	case UNIPHIER_LD6B_ID:
 		return 4;
 	default:
 		return 1;
@@ -150,4 +150,9 @@ int __secure psci_cpu_on(u32 function_id, u32 cpuid, u32 entry_point)
 	    "sev");
 
 	return PSCI_RET_SUCCESS;
+}
+
+void __secure psci_system_reset(u32 function_id)
+{
+	reset_cpu(0);
 }

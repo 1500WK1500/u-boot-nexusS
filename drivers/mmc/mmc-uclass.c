@@ -13,6 +13,8 @@
 #include <dm/root.h>
 #include "mmc_private.h"
 
+DECLARE_GLOBAL_DATA_PTR;
+
 #ifdef CONFIG_DM_MMC_OPS
 int dm_mmc_send_cmd(struct udevice *dev, struct mmc_cmd *cmd,
 		    struct mmc_data *data)
@@ -116,13 +118,7 @@ int get_mmc_num(void)
 
 int mmc_get_next_devnum(void)
 {
-	int ret;
-
-	ret = blk_find_max_devnum(IF_TYPE_MMC);
-	if (ret < 0)
-		return ret;
-
-	return ret;
+	return blk_find_max_devnum(IF_TYPE_MMC);
 }
 
 struct blk_desc *mmc_get_blk_desc(struct mmc *mmc)
@@ -198,10 +194,15 @@ int mmc_bind(struct udevice *dev, struct mmc *mmc, const struct mmc_config *cfg)
 {
 	struct blk_desc *bdesc;
 	struct udevice *bdev;
-	int ret;
+	int ret, devnum = -1;
 
-	ret = blk_create_devicef(dev, "mmc_blk", "blk", IF_TYPE_MMC, -1, 512,
-				 0, &bdev);
+#ifndef CONFIG_SPL_BUILD
+	/* Use the fixed index with aliase node's index */
+	fdtdec_get_alias_seq(gd->fdt_blob, "mmc", dev->of_offset, &devnum);
+#endif
+
+	ret = blk_create_devicef(dev, "mmc_blk", "blk", IF_TYPE_MMC,
+			devnum, 512, 0, &bdev);
 	if (ret) {
 		debug("Cannot create block device\n");
 		return ret;
@@ -231,7 +232,7 @@ int mmc_unbind(struct udevice *dev)
 
 	device_find_first_child(dev, &bdev);
 	if (bdev) {
-		device_remove(bdev);
+		device_remove(bdev, DM_REMOVE_NORMAL);
 		device_unbind(bdev);
 	}
 
@@ -243,7 +244,6 @@ static int mmc_select_hwpart(struct udevice *bdev, int hwpart)
 	struct udevice *mmc_dev = dev_get_parent(bdev);
 	struct mmc *mmc = mmc_get_mmc_dev(mmc_dev);
 	struct blk_desc *desc = dev_get_uclass_platdata(bdev);
-	int ret;
 
 	if (desc->hwpart == hwpart)
 		return 0;
@@ -251,17 +251,25 @@ static int mmc_select_hwpart(struct udevice *bdev, int hwpart)
 	if (mmc->part_config == MMCPART_NOAVAILABLE)
 		return -EMEDIUMTYPE;
 
-	ret = mmc_switch_part(mmc, hwpart);
-	if (ret)
-		return ret;
+	return mmc_switch_part(mmc, hwpart);
+}
 
-	return 0;
+static int mmc_blk_probe(struct udevice *dev)
+{
+	struct blk_desc *block_dev = dev_get_uclass_platdata(dev);
+	int dev_num = block_dev->devnum;
+	struct mmc *mmc = find_mmc_device(dev_num);
+
+	if (!mmc)
+		return -ENODEV;
+	return mmc_init(mmc);
 }
 
 static const struct blk_ops mmc_blk_ops = {
 	.read	= mmc_bread,
 #ifndef CONFIG_SPL_BUILD
 	.write	= mmc_bwrite,
+	.erase	= mmc_berase,
 #endif
 	.select_hwpart	= mmc_select_hwpart,
 };
@@ -270,6 +278,7 @@ U_BOOT_DRIVER(mmc_blk) = {
 	.name		= "mmc_blk",
 	.id		= UCLASS_BLK,
 	.ops		= &mmc_blk_ops,
+	.probe		= mmc_blk_probe,
 };
 #endif /* CONFIG_BLK */
 

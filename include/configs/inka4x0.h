@@ -18,7 +18,6 @@
 
 #define CONFIG_MPC5200		1	/* This is an MPC5200 CPU	*/
 #define CONFIG_INKA4X0		1	/* INKA4x0 board		*/
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * Valid values for CONFIG_SYS_TEXT_BASE are:
@@ -40,7 +39,6 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1	*/
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps	*/
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 
 /*
@@ -48,8 +46,6 @@
  * 0x40000000 - 0x4fffffff - PCI Memory
  * 0x50000000 - 0x50ffffff - PCI IO Space
  */
-#define CONFIG_PCI		1
-#define CONFIG_PCI_PNP		1
 #define CONFIG_PCI_SCAN_SHOW	1
 #define CONFIG_PCIAUTO_SKIP_HOST_BRIDGE	1
 
@@ -64,9 +60,6 @@
 #define CONFIG_SYS_XLB_PIPELINING	1
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 /*
  * BOOTP options
@@ -79,7 +72,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_IDE
 #define CONFIG_CMD_PCI
 
@@ -369,7 +361,6 @@ static inline void tws_data_config_output(unsigned output)
 #define CONFIG_USB_OHCI
 #define CONFIG_USB_CLOCK	0x00015555
 #define CONFIG_USB_CONFIG	0x00001000
-#define CONFIG_USB_STORAGE
 
 /*-----------------------------------------------------------------------
  * IDE/ATA stuff Supports IDE harddisk

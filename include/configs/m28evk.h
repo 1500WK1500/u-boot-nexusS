@@ -9,23 +9,16 @@
 
 /* System configurations */
 #define CONFIG_MX28				/* i.MX28 SoC */
-#define MACH_TYPE_M28EVK	3613
 #define CONFIG_MACH_TYPE	MACH_TYPE_M28EVK
 
 #define CONFIG_TIMESTAMP		/* Print image info with timestamp */
 
 /* U-Boot Commands */
-#define CONFIG_SYS_NO_FLASH
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DOS_PARTITION
 #define CONFIG_FAT_WRITE
 
-#define CONFIG_CMD_BMP
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_NAND
 #define CONFIG_CMD_NAND_TRIMFFS
-#define	CONFIG_VIDEO
 
 /* Memory configuration */
 #define CONFIG_NR_DRAM_BANKS		1		/* 1 bank of DRAM */
@@ -46,7 +39,6 @@
 #define CONFIG_ENV_OFFSET_REDUND	\
 		(CONFIG_ENV_OFFSET + CONFIG_ENV_RANGE)
 
-#define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
 #define CONFIG_CMD_MTDPARTS
 #define CONFIG_RBTREE
@@ -94,7 +86,6 @@
 #define CONFIG_EHCI_MXS_PORT0
 #define CONFIG_EHCI_MXS_PORT1
 #define CONFIG_USB_MAX_CONTROLLER_COUNT	2
-#define CONFIG_USB_STORAGE
 #endif
 
 /* SPI */
@@ -122,7 +113,6 @@
 #ifdef CONFIG_VIDEO
 #define	CONFIG_VIDEO_LOGO
 #define	CONFIG_SPLASH_SCREEN
-#define	CONFIG_CMD_BMP
 #define	CONFIG_BMP_16BPP
 #define	CONFIG_VIDEO_BMP_RLE8
 #define	CONFIG_VIDEO_BMP_GZIP

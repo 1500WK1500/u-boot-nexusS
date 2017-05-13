@@ -37,7 +37,6 @@
 #define CONFIG_HOSTNAME		katmai
 #include "amcc-common.h"
 
-#define CONFIG_BOARD_EARLY_INIT_F 1	/* Call board_pre_init		*/
 #undef  CONFIG_SHOW_BOOT_PROGRESS
 
 /*-----------------------------------------------------------------------
@@ -171,8 +170,6 @@
 /*
  * Commands additional to the ones defined in amcc-common.h
  */
-#define CONFIG_CMD_CHIP_CONFIG
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_ECCTEST
 #define CONFIG_CMD_PCI
 #define CONFIG_CMD_SDRAM
@@ -214,9 +211,7 @@
  *-----------------------------------------------------------------------
  */
 /* General PCI */
-#define CONFIG_PCI			/* include pci support		*/
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP		1	/* do pci plug-and-play		*/
 #define CONFIG_PCI_SCAN_SHOW	1	/* show pci devices on startup	*/
 #define CONFIG_PCI_CONFIG_HOST_BRIDGE
 
@@ -240,7 +235,6 @@
 #define CONFIG_SYSTEMACE	1	/* Enable SystemACE support	*/
 #define CONFIG_SYS_SYSTEMACE_WIDTH	16	/* Data bus width is 16		*/
 #define CONFIG_SYS_SYSTEMACE_BASE	CONFIG_SYS_ACE_BASE
-#define CONFIG_DOS_PARTITION	1
 
 /*-----------------------------------------------------------------------
  * External Bus Controller (EBC) Setup

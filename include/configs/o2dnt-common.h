@@ -17,7 +17,6 @@
  * High Level Configuration Options
  */
 #define CONFIG_MPC5200
-#define CONFIG_DISPLAY_BOARDINFO
 
 #define CONFIG_SYS_MPC5XXX_CLKIN	33000000 /* running at 33.000000MHz */
 
@@ -41,7 +40,6 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	5	/* console is on PSC5 */
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE \
 	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 
@@ -50,8 +48,6 @@
  * 0x40000000 - 0x4fffffff - PCI Memory
  * 0x50000000 - 0x50ffffff - PCI IO Space
  */
-#undef CONFIG_PCI
-#define CONFIG_PCI_PNP		1
 
 #define CONFIG_PCI_MEM_BUS	0x40000000
 #define CONFIG_PCI_MEM_PHYS	CONFIG_PCI_MEM_BUS
@@ -64,9 +60,6 @@
 #define CONFIG_SYS_XLB_PIPELINING	1
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 #define CONFIG_TIMESTAMP	/* Print image info with timestamp */
 
@@ -78,9 +71,6 @@
 #define CONFIG_CMD_EEPROM
 #ifdef CONFIG_PCI
 #define CONFIG_CMD_PCI
-#endif
-#ifdef CONFIG_POST
-#define CONFIG_CMD_DIAG
 #endif
 
 #if (CONFIG_SYS_TEXT_BASE == 0xFC000000) || (CONFIG_SYS_TEXT_BASE == 0xFF000000)
@@ -95,8 +85,8 @@
 
 #undef	CONFIG_BOOTARGS
 
-#if !defined(CONFIG_CONSOLE_DEV)
-#define CONFIG_CONSOLE_DEV	"ttyPSC1"
+#if !defined(CONSOLE_DEV)
+#define CONSOLE_DEV	"ttyPSC1"
 #endif
 
 /*
@@ -131,7 +121,7 @@
 	"addmem=setenv bootargs ${bootargs} ${memlimit}\0"		\
 	"addmisc=sete bootargs ${bootargs} ${miscargs}\0"		\
 	"addtty=sete bootargs ${bootargs} console="			\
-		CONFIG_CONSOLE_DEV ",${baudrate}\0"			\
+		CONSOLE_DEV ",${baudrate}\0"			\
 	"bootfile="CONFIG_BOARD_NAME"/uImage_"CONFIG_BOARD_NAME"_act\0"	\
 	"kernel_addr_r=600000\0"					\
 	"initrd_high=0x03e00000\0"					\

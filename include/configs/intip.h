@@ -24,10 +24,8 @@
 #define CONFIG_460EX		1	/* Specific PPC460EX		*/
 #ifdef CONFIG_DEVCONCENTER
 #define CONFIG_HOSTNAME		devconcenter
-#define CONFIG_IDENT_STRING	" devconcenter 0.06"
 #else
 #define CONFIG_HOSTNAME		intip
-#define CONFIG_IDENT_STRING	" intip 0.06"
 #endif
 #define CONFIG_440		1
 
@@ -42,7 +40,6 @@
 
 #define CONFIG_SYS_CLK_FREQ	66666667	/* external freq to pll	*/
 
-#define CONFIG_BOARD_EARLY_INIT_F	1	/* Call board_early_init_f */
 #define CONFIG_BOARD_EARLY_INIT_R	1	/* Call board_early_init_r */
 #define CONFIG_MISC_INIT_R		1	/* Call misc_init_r */
 #define CONFIG_BOARD_TYPES		1	/* support board types */
@@ -251,7 +248,6 @@
  * USB-OHCI
  */
 #define CONFIG_USB_OHCI_NEW
-#define CONFIG_USB_STORAGE
 #undef CONFIG_SYS_OHCI_BE_CONTROLLER	/* 460EX has little endian descriptors*/
 #define CONFIG_SYS_OHCI_SWAP_REG_ACCESS	/* 460EX has little endian register */
 #define CONFIG_SYS_OHCI_USE_NPS		/* force NoPowerSwitching mode */
@@ -276,24 +272,17 @@
 /*
  * Commands additional to the ones defined in amcc-common.h
  */
-#define CONFIG_CMD_CHIP_CONFIG
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_DTT
 #define CONFIG_CMD_PCI
 #define CONFIG_CMD_SDRAM
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 /*
  * PCI stuff
  */
 /* General PCI */
-#define CONFIG_PCI			/* include pci support	        */
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP			/* do pci plug-and-play   */
 #define CONFIG_PCI_SCAN_SHOW		/* show pci devices on startup  */
 #define CONFIG_PCI_CONFIG_HOST_BRIDGE
 #define CONFIG_PCI_DISABLE_PCIE

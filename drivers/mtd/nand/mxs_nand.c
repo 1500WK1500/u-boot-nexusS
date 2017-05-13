@@ -18,7 +18,7 @@
 #include <linux/mtd/nand.h>
 #include <linux/types.h>
 #include <malloc.h>
-#include <asm/errno.h>
+#include <linux/errno.h>
 #include <asm/io.h>
 #include <asm/arch/clock.h>
 #include <asm/arch/imx-regs.h>
@@ -37,7 +37,12 @@
 #endif
 #define	MXS_NAND_METADATA_SIZE			10
 #define	MXS_NAND_BITS_PER_ECC_LEVEL		13
+
+#if !defined(CONFIG_SYS_CACHELINE_SIZE) || CONFIG_SYS_CACHELINE_SIZE < 32
 #define	MXS_NAND_COMMAND_BUFFER_SIZE		32
+#else
+#define	MXS_NAND_COMMAND_BUFFER_SIZE		CONFIG_SYS_CACHELINE_SIZE
+#endif
 
 #define	MXS_NAND_BCH_TIMEOUT			10000
 

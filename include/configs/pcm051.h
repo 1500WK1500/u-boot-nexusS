@@ -22,7 +22,6 @@
 #include <configs/ti_am335x_common.h>
 
 #define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
-#define MACH_TYPE_PCM051		4144	/* Until the next sync */
 #define CONFIG_MACH_TYPE		MACH_TYPE_PCM051
 
 /* set to negative value for no autoboot */
@@ -120,16 +119,9 @@
 /* CPU */
 #define CONFIG_ENV_IS_NOWHERE
 
-#define CONFIG_SPL_YMODEM_SUPPORT
-#define CONFIG_SPL_NET_SUPPORT
-#define CONFIG_SPL_ENV_SUPPORT
-#define CONFIG_SPL_NET_VCI_STRING	"pcm051 U-Boot SPL"
-#define CONFIG_SPL_ETH_SUPPORT
-#define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
 
 #ifdef CONFIG_SPI_BOOT
-#define CONFIG_SPL_SPI_SUPPORT
-#define CONFIG_SPL_SPI_FLASH_SUPPORT
 #define CONFIG_SPL_SPI_LOAD
 #define CONFIG_SYS_SPI_U_BOOT_OFFS	0x20000
 #define CONFIG_SYS_SPI_U_BOOT_SIZE	0x40000
@@ -139,16 +131,11 @@
  * USB configuration
  */
 #define CONFIG_USB_MUSB_DSPS
-#define CONFIG_ARCH_MISC_INIT
 #define CONFIG_USB_MUSB_PIO_ONLY
 #define CONFIG_AM335X_USB0
 #define CONFIG_AM335X_USB0_MODE	MUSB_PERIPHERAL
 #define CONFIG_AM335X_USB1
 #define CONFIG_AM335X_USB1_MODE MUSB_HOST
-
-#ifdef CONFIG_USB_MUSB_HOST
-#define CONFIG_USB_STORAGE
-#endif
 
 #ifdef CONFIG_USB_MUSB_GADGET
 #define CONFIG_USB_ETHER

@@ -11,8 +11,6 @@
 
 #define CONFIG_SKIP_LOWLEVEL_INIT
 
-#define CONFIG_SYS_CACHELINE_SIZE	64
-
 /*
  * Memory configuration
  * (these must be defined elsewhere)
@@ -30,7 +28,6 @@
 #define CONFIG_NR_DRAM_BANKS		1
 
 #define CONFIG_SYS_MALLOC_LEN		(4 * 1024 * 1024)
-#define CONFIG_STACKSIZE		(256 * 1024)
 
 /* Some commands use this as the default load address */
 #define CONFIG_SYS_LOAD_ADDR		CONFIG_SYS_SDRAM_BASE
@@ -48,12 +45,8 @@
 /* Serial Info */
 #define CONFIG_SYS_NS16550_SERIAL
 
-#define CONFIG_BAUDRATE			115200
-
 #define CONFIG_ENV_SIZE			0x2000
 #define CONFIG_ENV_IS_NOWHERE
-
-#define CONFIG_SYS_NO_FLASH	/* Not using NAND/NOR unmanaged flash */
 
 /* console configuration */
 #define CONFIG_SYS_CBSIZE		1024	/* Console buffer size */
@@ -62,18 +55,9 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_BARGSIZE		CONFIG_SYS_CBSIZE
 
-/*
- * One partition type must be defined for part.c
- * This is necessary for the fatls command to work on an SD card
- * for example.
- */
-#define CONFIG_DOS_PARTITION
-
 /* version string, parser, etc */
-#define CONFIG_VERSION_VARIABLE
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING
-#define CONFIG_COMMAND_HISTORY
 #define CONFIG_SYS_LONGHELP
 
 #define CONFIG_CRC32_VERIFY
@@ -93,6 +77,5 @@
 /* Misc utility code */
 #define CONFIG_BOUNCE_BUFFER
 #define CONFIG_CRC32_VERIFY
-#define CONFIG_ARMV7_PSCI_NR_CPUS	4
 
 #endif /* __BCM_EP_BOARD_H */

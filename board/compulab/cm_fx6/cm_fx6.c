@@ -588,7 +588,7 @@ struct node_info nodes[] = {
 	/*
 	 * Both entries target the same flash chip. The st,m25p compatible
 	 * is used in the vendor device trees, while upstream uses (the
-	 * documented) jedec,spi-nor comptatible.
+	 * documented) jedec,spi-nor compatible.
 	 */
 	{ "st,m25p",	MTD_DEV_TYPE_NOR,	},
 	{ "jedec,spi-nor",	MTD_DEV_TYPE_NOR,	},
@@ -602,7 +602,7 @@ int ft_board_setup(void *blob, bd_t *bd)
 	char baseboard_name[16];
 	int err;
 
-	fdt_shrink_to_minimum(blob); /* Make room for new properties */
+	fdt_shrink_to_minimum(blob, 0); /* Make room for new properties */
 
 	/* MAC addr */
 	if (eth_getenv_enetaddr("ethaddr", enetaddr)) {
@@ -615,6 +615,8 @@ int ft_board_setup(void *blob, bd_t *bd)
 		fdt_find_and_setprop(blob, "/eth@pcie", "local-mac-address",
 				     enetaddr, 6, 1);
 	}
+
+	fdt_fixup_mtdparts(blob, nodes, ARRAY_SIZE(nodes));
 
 	baseboard_rev = cl_eeprom_get_board_rev(0);
 	err = cl_eeprom_get_product_name((uchar *)baseboard_name, 0);
@@ -629,8 +631,6 @@ int ft_board_setup(void *blob, bd_t *bd)
 		fdt_find_and_setprop(blob, USDHC3_PATH, "keep-power-in-suspend",
 				     NULL, 0, 1);
 	}
-
-	fdt_fixup_mtdparts(blob, nodes, ARRAY_SIZE(nodes));
 
 	return 0;
 }
@@ -688,7 +688,7 @@ int misc_init_r(void)
 	return 0;
 }
 
-void dram_init_banksize(void)
+int dram_init_banksize(void)
 {
 	gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
 	gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
@@ -720,6 +720,8 @@ void dram_init_banksize(void)
 		gd->bd->bi_dram[1].size = 0x7FF00000;
 		break;
 	}
+
+	return 0;
 }
 
 int dram_init(void)

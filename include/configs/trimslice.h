@@ -27,11 +27,6 @@
 /* I2C */
 #define CONFIG_SYS_I2C_TEGRA
 
-/* SD/MMC */
-#define CONFIG_MMC
-#define CONFIG_GENERIC_MMC
-#define CONFIG_TEGRA_MMC
-
 /* Environment in SPI */
 #define CONFIG_ENV_IS_IN_SPI_FLASH
 #define CONFIG_ENV_SPI_MAX_HZ		48000000
@@ -43,15 +38,12 @@
 /* USB Host support */
 #define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
-#define CONFIG_USB_STORAGE
 
 /* USB networking support */
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
 
 /* PCI host support */
-#define CONFIG_PCI
-#define CONFIG_PCI_PNP
 #define CONFIG_CMD_PCI
 
 /* General networking support */

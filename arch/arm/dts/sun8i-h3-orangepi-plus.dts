@@ -44,8 +44,20 @@
 #include "sun8i-h3-orangepi-2.dts"
 
 / {
-	model = "Xunlong Orange Pi Plus / Plus 2 / Plus 2E";
+	model = "Xunlong Orange Pi Plus / Plus 2";
 	compatible = "xunlong,orangepi-plus", "allwinner,sun8i-h3";
+
+	reg_gmac_3v3: gmac-3v3 {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gmac_power_pin_orangepi>;
+		regulator-name = "gmac-3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		startup-delay-us = <100000>;
+		enable-active-high;
+		gpio = <&pio 3 6 GPIO_ACTIVE_HIGH>;
+	};
 
 	reg_usb3_vbus: usb3-vbus {
 		compatible = "regulator-fixed";
@@ -60,12 +72,17 @@
 	};
 };
 
-&ehci2 {
+&ehci3 {
 	status = "okay";
 };
 
-&ehci3 {
-	status = "okay";
+&emac {
+	/* The Orange Pi Plus uses an external phy */
+	pinctrl-names = "default";
+	pinctrl-0 = <&emac_rgmii_pins>;
+	phy-supply = <&reg_gmac_3v3>;
+	phy-mode = "rgmii";
+	/delete-property/allwinner,use-internal-phy;
 };
 
 &mmc2 {
@@ -85,19 +102,14 @@
 	allwinner,pull = <SUN4I_PINCTRL_PULL_UP>;
 };
 
-&ohci1 {
-	status = "okay";
-};
-
-&ohci2 {
-	status = "okay";
-};
-
-&ohci3 {
-	status = "okay";
-};
-
 &pio {
+	gmac_power_pin_orangepi: gmac_power_pin@0 {
+		allwinner,pins = "PD6";
+		allwinner,function = "gpio_out";
+		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
+		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+	};
+
 	usb3_vbus_pin_a: usb3_vbus_pin@0 {
 		allwinner,pins = "PG11";
 		allwinner,function = "gpio_out";

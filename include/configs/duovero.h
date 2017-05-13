@@ -16,13 +16,9 @@
  * High Level Configuration Options
  */
 #define CONFIG_DUOVERO
-#define MACH_TYPE_OMAP4_DUOVERO              4097    /* Until the next sync */
-#define CONFIG_MACH_TYPE                MACH_TYPE_OMAP4_DUOVERO
+#define CONFIG_MACH_TYPE                MACH_TYPE_DUOVERO
 
 #include <configs/ti_omap4_common.h>
-
-#undef CONFIG_SPL_OS_BOOT
-#undef CONFIG_EFI_PARTITION
 
 #undef CONFIG_SYS_EMIF_PRECALCULATED_TIMING_REGS
 #define CONFIG_SYS_AUTOMATIC_SDRAM_DETECTION
@@ -31,7 +27,6 @@
 /* USB UHH support options */
 #define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_OMAP
-#define CONFIG_USB_STORAGE
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS 3
 
 #define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 1

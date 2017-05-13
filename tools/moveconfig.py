@@ -41,26 +41,28 @@ The log is printed for each defconfig as follows:
 <defconfig_name> is the name of the defconfig.
 
 <action*> shows what the tool did for that defconfig.
-It looks like one of the followings:
+It looks like one of the following:
 
  - Move 'CONFIG_... '
    This config option was moved to the defconfig
 
  - CONFIG_... is not defined in Kconfig.  Do nothing.
-   The entry for this CONFIG was not found in Kconfig.
+   The entry for this CONFIG was not found in Kconfig.  The option is not
+   defined in the config header, either.  So, this case can be just skipped.
+
+ - CONFIG_... is not defined in Kconfig (suspicious).  Do nothing.
+   This option is defined in the config header, but its entry was not found
+   in Kconfig.
    There are two common cases:
      - You forgot to create an entry for the CONFIG before running
        this tool, or made a typo in a CONFIG passed to this tool.
      - The entry was hidden due to unmet 'depends on'.
-       This is correct behavior.
+   The tool does not know if the result is reasonable, so please check it
+   manually.
 
  - 'CONFIG_...' is the same as the define in Kconfig.  Do nothing.
    The define in the config header matched the one in Kconfig.
    We do not need to touch it.
-
- - Undefined.  Do nothing.
-   This config option was not found in the config header.
-   Nothing to do.
 
  - Compiler is missing.  Do nothing.
    The compiler specified for this architecture was not found
@@ -120,8 +122,13 @@ Available options
    Surround each portion of the log with escape sequences to display it
    in color on the terminal.
 
+ -C, --commit
+   Create a git commit with the changes when the operation is complete. A
+   standard commit message is used which may need to be edited.
+
  -d, --defconfigs
-  Specify a file containing a list of defconfigs to move
+  Specify a file containing a list of defconfigs to move.  The defconfig
+  files can be given with shell-style wildcards.
 
  -n, --dry-run
    Perform a trial run that does not make any changes.  It is useful to
@@ -135,6 +142,12 @@ Available options
    Do "make savedefconfig" forcibly for all the defconfig files.
    If not specified, "make savedefconfig" only occurs for cases
    where at least one CONFIG was moved.
+
+ -S, --spl
+   Look for moved config options in spl/include/autoconf.mk instead of
+   include/autoconf.mk.  This is useful for moving options for SPL build
+   because SPL related options (mostly prefixed with CONFIG_SPL_) are
+   sometimes blocked by CONFIG_SPL_BUILD ifdef conditionals.
 
  -H, --headers-only
    Only cleanup the headers; skip the defconfig processing
@@ -154,6 +167,10 @@ Available options
  -v, --verbose
    Show any build errors as boards are built
 
+ -y, --yes
+   Instead of prompting, automatically go ahead with all operations. This
+   includes cleaning up headers and CONFIG_SYS_EXTRA_OPTIONS.
+
 To see the complete list of supported options, run
 
   $ tools/moveconfig.py -h
@@ -164,6 +181,7 @@ import copy
 import difflib
 import filecmp
 import fnmatch
+import glob
 import multiprocessing
 import optparse
 import os
@@ -179,31 +197,25 @@ SLEEP_TIME=0.03
 
 # Here is the list of cross-tools I use.
 # Most of them are available at kernel.org
-# (https://www.kernel.org/pub/tools/crosstool/files/bin/), except the followings:
+# (https://www.kernel.org/pub/tools/crosstool/files/bin/), except the following:
 # arc: https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
-# blackfin: http://sourceforge.net/projects/adi-toolchain/files/
 # nds32: http://osdk.andestech.com/packages/nds32le-linux-glibc-v1.tgz
 # nios2: https://sourcery.mentor.com/GNUToolchain/subscription42545
 # sh: http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
-#
-# openrisc kernel.org toolchain is out of date, download latest one from
-# http://opencores.org/or1k/OpenRISC_GNU_tool_chain#Prebuilt_versions
 CROSS_COMPILE = {
     'arc': 'arc-linux-',
     'aarch64': 'aarch64-linux-',
     'arm': 'arm-unknown-linux-gnueabi-',
     'avr32': 'avr32-linux-',
-    'blackfin': 'bfin-elf-',
     'm68k': 'm68k-linux-',
     'microblaze': 'microblaze-linux-',
     'mips': 'mips-linux-',
     'nds32': 'nds32le-linux-',
     'nios2': 'nios2-linux-gnu-',
-    'openrisc': 'or1k-elf-',
     'powerpc': 'powerpc-linux-',
     'sh': 'sh-linux-gnu-',
-    'sparc': 'sparc-linux-',
-    'x86': 'i386-linux-'
+    'x86': 'i386-linux-',
+    'xtensa': 'xtensa-linux-'
 }
 
 STATE_IDLE = 0
@@ -213,7 +225,8 @@ STATE_SAVEDEFCONFIG = 3
 
 ACTION_MOVE = 0
 ACTION_NO_ENTRY = 1
-ACTION_NO_CHANGE = 2
+ACTION_NO_ENTRY_WARN = 2
+ACTION_NO_CHANGE = 3
 
 COLOR_BLACK        = '0;30'
 COLOR_RED          = '0;31'
@@ -265,6 +278,24 @@ def get_make_cmd():
     if process.returncode:
         sys.exit('GNU Make not found')
     return ret[0].rstrip()
+
+def get_matched_defconfigs(defconfigs_file):
+    """Get all the defconfig files that match the patterns in a file."""
+    defconfigs = []
+    for i, line in enumerate(open(defconfigs_file)):
+        line = line.strip()
+        if not line:
+            continue # skip blank lines silently
+        pattern = os.path.join('configs', line)
+        matched = glob.glob(pattern) + glob.glob(pattern + '_defconfig')
+        if not matched:
+            print >> sys.stderr, "warning: %s:%d: no defconfig matched '%s'" % \
+                                                 (defconfigs_file, i + 1, line)
+
+        defconfigs += matched
+
+    # use set() to drop multiple matching
+    return [ defconfig[len('configs') + 1:]  for defconfig in set(defconfigs) ]
 
 def get_all_defconfigs():
     """Get all the defconfig files under the configs/ directory."""
@@ -404,6 +435,20 @@ def extend_matched_lines(lines, matched, pre_patterns, post_patterns, extend_pre
     matched += extended_matched
     matched.sort()
 
+def confirm(options, prompt):
+    if not options.yes:
+        while True:
+            choice = raw_input('{} [y/n]: '.format(prompt))
+            choice = choice.lower()
+            print choice
+            if choice == 'y' or choice == 'n':
+                break
+
+        if choice == 'n':
+            return False
+
+    return True
+
 def cleanup_one_header(header_path, patterns, options):
     """Clean regex-matched lines away from a file.
 
@@ -471,13 +516,7 @@ def cleanup_headers(configs, options):
       configs: A list of CONFIGs to remove.
       options: option flags.
     """
-    while True:
-        choice = raw_input('Clean up headers? [y/n]: ').lower()
-        print choice
-        if choice == 'y' or choice == 'n':
-            break
-
-    if choice == 'n':
+    if not confirm(options, 'Clean up headers?'):
         return
 
     patterns = []
@@ -550,13 +589,7 @@ def cleanup_extra_options(configs, options):
       configs: A list of CONFIGs to remove.
       options: option flags.
     """
-    while True:
-        choice = raw_input('Clean up CONFIG_SYS_EXTRA_OPTIONS? [y/n]: ').lower()
-        print choice
-        if choice == 'y' or choice == 'n':
-            break
-
-    if choice == 'n':
+    if not confirm(options, 'Clean up CONFIG_SYS_EXTRA_OPTIONS?'):
         return
 
     configs = [ config[len('CONFIG_'):] for config in configs ]
@@ -566,6 +599,65 @@ def cleanup_extra_options(configs, options):
     for defconfig in defconfigs:
         cleanup_one_extra_option(os.path.join('configs', defconfig), configs,
                                  options)
+
+def cleanup_whitelist(configs, options):
+    """Delete config whitelist entries
+
+    Arguments:
+      configs: A list of CONFIGs to remove.
+      options: option flags.
+    """
+    if not confirm(options, 'Clean up whitelist entries?'):
+        return
+
+    with open(os.path.join('scripts', 'config_whitelist.txt')) as f:
+        lines = f.readlines()
+
+    lines = [x for x in lines if x.strip() not in configs]
+
+    with open(os.path.join('scripts', 'config_whitelist.txt'), 'w') as f:
+        f.write(''.join(lines))
+
+def find_matching(patterns, line):
+    for pat in patterns:
+        if pat.search(line):
+            return True
+    return False
+
+def cleanup_readme(configs, options):
+    """Delete config description in README
+
+    Arguments:
+      configs: A list of CONFIGs to remove.
+      options: option flags.
+    """
+    if not confirm(options, 'Clean up README?'):
+        return
+
+    patterns = []
+    for config in configs:
+        patterns.append(re.compile(r'^\s+%s' % config))
+
+    with open('README') as f:
+        lines = f.readlines()
+
+    found = False
+    newlines = []
+    for line in lines:
+        if not found:
+            found = find_matching(patterns, line)
+            if found:
+                continue
+
+        if found and re.search(r'^\s+CONFIG', line):
+            found = False
+
+        if not found:
+            newlines.append(line)
+
+    with open('README', 'w') as f:
+        f.write(''.join(newlines))
+
 
 ### classes ###
 class Progress:
@@ -610,6 +702,8 @@ class KconfigParser:
         self.options = options
         self.dotconfig = os.path.join(build_dir, '.config')
         self.autoconf = os.path.join(build_dir, 'include', 'autoconf.mk')
+        self.spl_autoconf = os.path.join(build_dir, 'spl', 'include',
+                                         'autoconf.mk')
         self.config_autoconf = os.path.join(build_dir, 'include', 'config',
                                             'auto.conf')
         self.defconfig = os.path.join(build_dir, 'defconfig')
@@ -662,14 +756,6 @@ class KconfigParser:
         """
         not_set = '# %s is not set' % config
 
-        for line in dotconfig_lines:
-            line = line.rstrip()
-            if line.startswith(config + '=') or line == not_set:
-                old_val = line
-                break
-        else:
-            return (ACTION_NO_ENTRY, config)
-
         for line in autoconf_lines:
             line = line.rstrip()
             if line.startswith(config + '='):
@@ -677,6 +763,17 @@ class KconfigParser:
                 break
         else:
             new_val = not_set
+
+        for line in dotconfig_lines:
+            line = line.rstrip()
+            if line.startswith(config + '=') or line == not_set:
+                old_val = line
+                break
+        else:
+            if new_val == not_set:
+                return (ACTION_NO_ENTRY, config)
+            else:
+                return (ACTION_NO_ENTRY_WARN, config)
 
         # If this CONFIG is neither bool nor trisate
         if old_val[-2:] != '=y' and old_val[-2:] != '=m' and old_val != not_set:
@@ -707,11 +804,26 @@ class KconfigParser:
 
         results = []
         updated = False
+        suspicious = False
+        rm_files = [self.config_autoconf, self.autoconf]
+
+        if self.options.spl:
+            if os.path.exists(self.spl_autoconf):
+                autoconf_path = self.spl_autoconf
+                rm_files.append(self.spl_autoconf)
+            else:
+                for f in rm_files:
+                    os.remove(f)
+                return (updated, suspicious,
+                        color_text(self.options.color, COLOR_BROWN,
+                                   "SPL is not enabled.  Skipped.") + '\n')
+        else:
+            autoconf_path = self.autoconf
 
         with open(self.dotconfig) as f:
             dotconfig_lines = f.readlines()
 
-        with open(self.autoconf) as f:
+        with open(autoconf_path) as f:
             autoconf_lines = f.readlines()
 
         for config in self.configs:
@@ -728,10 +840,17 @@ class KconfigParser:
             elif action == ACTION_NO_ENTRY:
                 actlog = "%s is not defined in Kconfig.  Do nothing." % value
                 log_color = COLOR_LIGHT_BLUE
+            elif action == ACTION_NO_ENTRY_WARN:
+                actlog = "%s is not defined in Kconfig (suspicious).  Do nothing." % value
+                log_color = COLOR_YELLOW
+                suspicious = True
             elif action == ACTION_NO_CHANGE:
                 actlog = "'%s' is the same as the define in Kconfig.  Do nothing." \
                          % value
                 log_color = COLOR_LIGHT_PURPLE
+            elif action == ACTION_SPL_NOT_EXIST:
+                actlog = "SPL is not enabled for this defconfig.  Skip."
+                log_color = COLOR_PURPLE
             else:
                 sys.exit("Internal Error. This should not happen.")
 
@@ -744,10 +863,10 @@ class KconfigParser:
                     updated = True
 
         self.results = results
-        os.remove(self.config_autoconf)
-        os.remove(self.autoconf)
+        for f in rm_files:
+            os.remove(f)
 
-        return (updated, log)
+        return (updated, suspicious, log)
 
     def check_defconfig(self):
         """Check the defconfig after savedefconfig
@@ -801,8 +920,8 @@ class Slot:
         self.reference_src_dir = reference_src_dir
         self.parser = KconfigParser(configs, options, self.build_dir)
         self.state = STATE_IDLE
-        self.failed_boards = []
-        self.suspicious_boards = []
+        self.failed_boards = set()
+        self.suspicious_boards = set()
 
     def __del__(self):
         """Delete the working directory
@@ -926,7 +1045,9 @@ class Slot:
     def do_savedefconfig(self):
         """Update the .config and run 'make savedefconfig'."""
 
-        (updated, log) = self.parser.update_dotconfig()
+        (updated, suspicious, log) = self.parser.update_dotconfig()
+        if suspicious:
+            self.suspicious_boards.add(self.defconfig)
         self.log += log
 
         if not self.options.force_sync and not updated:
@@ -949,7 +1070,7 @@ class Slot:
 
         log = self.parser.check_defconfig()
         if log:
-            self.suspicious_boards.append(self.defconfig)
+            self.suspicious_boards.add(self.defconfig)
             self.log += log
         orig_defconfig = os.path.join('configs', self.defconfig)
         new_defconfig = os.path.join(self.build_dir, 'defconfig')
@@ -983,21 +1104,21 @@ class Slot:
                 sys.exit("Exit on error.")
             # If --exit-on-error flag is not set, skip this board and continue.
             # Record the failed board.
-            self.failed_boards.append(self.defconfig)
+            self.failed_boards.add(self.defconfig)
 
         self.progress.inc()
         self.progress.show()
         self.state = STATE_IDLE
 
     def get_failed_boards(self):
-        """Returns a list of failed boards (defconfigs) in this slot.
+        """Returns a set of failed boards (defconfigs) in this slot.
         """
         return self.failed_boards
 
     def get_suspicious_boards(self):
-        """Returns a list of boards (defconfigs) with possible misconversion.
+        """Returns a set of boards (defconfigs) with possible misconversion.
         """
-        return self.suspicious_boards
+        return self.suspicious_boards - self.failed_boards
 
 class Slots:
 
@@ -1060,11 +1181,11 @@ class Slots:
 
     def show_failed_boards(self):
         """Display all of the failed boards (defconfigs)."""
-        boards = []
+        boards = set()
         output_file = 'moveconfig.failed'
 
         for slot in self.slots:
-            boards += slot.get_failed_boards()
+            boards |= slot.get_failed_boards()
 
         if boards:
             boards = '\n'.join(boards) + '\n'
@@ -1079,11 +1200,11 @@ class Slots:
 
     def show_suspicious_boards(self):
         """Display all boards (defconfigs) with possible misconversion."""
-        boards = []
+        boards = set()
         output_file = 'moveconfig.suspicious'
 
         for slot in self.slots:
-            boards += slot.get_suspicious_boards()
+            boards |= slot.get_suspicious_boards()
 
         if boards:
             boards = '\n'.join(boards) + '\n'
@@ -1154,13 +1275,7 @@ def move_config(configs, options):
         reference_src_dir = None
 
     if options.defconfigs:
-        defconfigs = [line.strip() for line in open(options.defconfigs)]
-        for i, defconfig in enumerate(defconfigs):
-            if not defconfig.endswith('_defconfig'):
-                defconfigs[i] = defconfig + '_defconfig'
-            if not os.path.exists(os.path.join('configs', defconfigs[i])):
-                sys.exit('%s - defconfig does not exist. Stopping.' %
-                         defconfigs[i])
+        defconfigs = get_matched_defconfigs(options.defconfigs)
     else:
         defconfigs = get_all_defconfigs()
 
@@ -1194,6 +1309,8 @@ def main():
     # Add options here
     parser.add_option('-c', '--color', action='store_true', default=False,
                       help='display the log in color')
+    parser.add_option('-C', '--commit', action='store_true', default=False,
+                      help='Create a git commit for the operation')
     parser.add_option('-d', '--defconfigs', type='string',
                       help='a file containing a list of defconfigs to move')
     parser.add_option('-n', '--dry-run', action='store_true', default=False,
@@ -1203,6 +1320,8 @@ def main():
                       help='exit immediately on any error')
     parser.add_option('-s', '--force-sync', action='store_true', default=False,
                       help='force sync by savedefconfig')
+    parser.add_option('-S', '--spl', action='store_true', default=False,
+                      help='parse config options defined for SPL build')
     parser.add_option('-H', '--headers-only', dest='cleanup_headers_only',
                       action='store_true', default=False,
                       help='only cleanup the headers')
@@ -1210,6 +1329,8 @@ def main():
                       help='the number of jobs to run simultaneously')
     parser.add_option('-r', '--git-ref', type='string',
                       help='the git ref to clone for building the autoconf.mk')
+    parser.add_option('-y', '--yes', action='store_true', default=False,
+                      help="respond 'yes' to any prompts")
     parser.add_option('-v', '--verbose', action='store_true', default=False,
                       help='show any build errors as boards are built')
     parser.usage += ' CONFIG ...'
@@ -1234,6 +1355,20 @@ def main():
     if configs:
         cleanup_headers(configs, options)
         cleanup_extra_options(configs, options)
+        cleanup_whitelist(configs, options)
+        cleanup_readme(configs, options)
+
+    if options.commit:
+        subprocess.call(['git', 'add', '-u'])
+        if configs:
+            msg = 'Convert %s %sto Kconfig' % (configs[0],
+                    'et al ' if len(configs) > 1 else '')
+            msg += ('\n\nThis converts the following to Kconfig:\n   %s\n' %
+                    '\n   '.join(configs))
+        else:
+            msg = 'configs: Resync with savedefconfig'
+            msg += '\n\nRsync all defconfig files using moveconfig.py'
+        subprocess.call(['git', 'commit', '-s', '-m', msg])
 
 if __name__ == '__main__':
     main()

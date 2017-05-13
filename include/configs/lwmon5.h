@@ -12,11 +12,6 @@
 #define __CONFIG_H
 
 /*
- * Liebherr extra version info
- */
-#define CONFIG_IDENT_STRING	" - v2.0"
-
-/*
  * High Level Configuration Options
  */
 #define CONFIG_LWMON5		1		/* Board is lwmon5	*/
@@ -30,7 +25,6 @@
 
 #define CONFIG_4xx_DCACHE		/* enable cache in SDRAM	*/
 
-#define CONFIG_BOARD_EARLY_INIT_F	/* Call board_early_init_f	*/
 #define CONFIG_BOARD_EARLY_INIT_R	/* Call board_early_init_r	*/
 #define CONFIG_BOARD_POSTCLK_INIT	/* Call board_postclk_init	*/
 #define CONFIG_MISC_INIT_R		/* Call misc_init_r		*/
@@ -105,7 +99,6 @@
 #define CONFIG_SYS_NS16550_REG_SIZE	1
 #define CONFIG_SYS_NS16550_CLK		get_serial_clock()
 #undef CONFIG_SYS_EXT_SERIAL_CLOCK		/* no external clock provided	*/
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_SYS_BAUDRATE_TABLE						\
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200}
@@ -260,7 +253,6 @@
 /* Reserve GPT0_COMP1-COMP5 for logbuffer header */
 #define CONFIG_ALT_LH_ADDR	(CONFIG_SYS_PERIPHERAL_BASE + GPT0_COMP1)
 #define CONFIG_ALT_LB_ADDR	(CONFIG_SYS_OCM_BASE)
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV /* Otherwise it catches logbuffer as output */
 
 /*
  * I2C
@@ -359,17 +351,12 @@
 #define CONFIG_PHY1_ADDR	1
 
 /* Video console */
-#define CONFIG_VIDEO
 #define CONFIG_VIDEO_MB862xx
 #define CONFIG_VIDEO_MB862xx_ACCEL
-#define CONFIG_CFB_CONSOLE
 #define CONFIG_VIDEO_LOGO
-#define CONFIG_CONSOLE_EXTRA_INFO
 #define VIDEO_FB_16BPP_PIXEL_SWAP
 #define VIDEO_FB_16BPP_WORD_SWAP
 
-#define CONFIG_VGA_AS_SINGLE_DEVICE
-#define CONFIG_VIDEO_SW_CURSOR
 #define CONFIG_SPLASH_SCREEN
 
 /*
@@ -381,12 +368,8 @@
 #define CONFIG_EHCI_MMIO_BIG_ENDIAN
 #define CONFIG_EHCI_DESC_BIG_ENDIAN
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET /* re-init HCD after CMD_RESET */
-#define CONFIG_USB_STORAGE
 
 /* Partitions */
-#define CONFIG_MAC_PARTITION
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
 
 /*
  * BOOTP options
@@ -399,16 +382,10 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_DIAG
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IRQ
 #define CONFIG_CMD_REGINFO
 #define CONFIG_CMD_SDRAM
-
-#ifdef CONFIG_VIDEO
-#define CONFIG_CMD_BMP
-#endif
 
 #ifdef CONFIG_440EPX
 #endif
@@ -437,9 +414,6 @@
 
 #define CONFIG_CMDLINE_EDITING	1	/* add command line history	*/
 #define CONFIG_MX_CYCLIC        1       /* enable mdc/mwc commands      */
-#define CONFIG_VERSION_VARIABLE 1	/* include version env variable */
-
-#define CONFIG_SYS_CONSOLE_INFO_QUIET	/* don't print console @ startup*/
 
 #ifndef DEBUG
 #define CONFIG_HW_WATCHDOG	1	/* Use external HW-Watchdog	*/

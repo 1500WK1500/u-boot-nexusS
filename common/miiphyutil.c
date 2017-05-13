@@ -107,6 +107,18 @@ int mdio_register(struct mii_dev *bus)
 	return 0;
 }
 
+int mdio_register_seq(struct mii_dev *bus, int seq)
+{
+	int ret;
+
+	/* Setup a unique name for each mdio bus */
+	ret = snprintf(bus->name, MDIO_NAME_LEN, "eth%d", seq);
+	if (ret < 0)
+		return ret;
+
+	return mdio_register(bus);
+}
+
 int mdio_unregister(struct mii_dev *bus)
 {
 	if (!bus)
@@ -135,7 +147,7 @@ void mdio_list_devices(void)
 			struct phy_device *phydev = bus->phymap[i];
 
 			if (phydev) {
-				printf("%d - %s", i, phydev->drv->name);
+				printf("%x - %s", i, phydev->drv->name);
 
 				if (phydev->dev)
 					printf(" <--> %s\n", phydev->dev->name);
@@ -380,7 +392,7 @@ int miiphy_reset(const char *devname, unsigned char addr)
  */
 int miiphy_speed(const char *devname, unsigned char addr)
 {
-	u16 bmcr, anlpar;
+	u16 bmcr, anlpar, adv;
 
 #if defined(CONFIG_PHY_GIGE)
 	u16 btsr;
@@ -417,7 +429,12 @@ int miiphy_speed(const char *devname, unsigned char addr)
 			printf("PHY AN speed");
 			goto miiphy_read_failed;
 		}
-		return (anlpar & LPA_100) ? _100BASET : _10BASET;
+
+		if (miiphy_read(devname, addr, MII_ADVERTISE, &adv)) {
+			puts("PHY AN adv speed");
+			goto miiphy_read_failed;
+		}
+		return ((anlpar & adv) & LPA_100) ? _100BASET : _10BASET;
 	}
 	/* Get speed from basic control settings. */
 	return (bmcr & BMCR_SPEED100) ? _100BASET : _10BASET;
@@ -433,7 +450,7 @@ miiphy_read_failed:
  */
 int miiphy_duplex(const char *devname, unsigned char addr)
 {
-	u16 bmcr, anlpar;
+	u16 bmcr, anlpar, adv;
 
 #if defined(CONFIG_PHY_GIGE)
 	u16 btsr;
@@ -475,7 +492,12 @@ int miiphy_duplex(const char *devname, unsigned char addr)
 			puts("PHY AN duplex");
 			goto miiphy_read_failed;
 		}
-		return (anlpar & (LPA_10FULL | LPA_100FULL)) ?
+
+		if (miiphy_read(devname, addr, MII_ADVERTISE, &adv)) {
+			puts("PHY AN adv duplex");
+			goto miiphy_read_failed;
+		}
+		return ((anlpar & adv) & (LPA_10FULL | LPA_100FULL)) ?
 		    FULL : HALF;
 	}
 	/* Get speed from basic control settings. */

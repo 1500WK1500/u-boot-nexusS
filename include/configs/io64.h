@@ -36,10 +36,8 @@
  * Include common defines/options for all AMCC eval boards
  */
 #define CONFIG_HOSTNAME		io64
-#define CONFIG_IDENT_STRING	" io64 0.02"
 #include "amcc-common.h"
 
-#define CONFIG_BOARD_EARLY_INIT_F
 #define CONFIG_BOARD_EARLY_INIT_R
 #define CONFIG_MISC_INIT_R
 #define CONFIG_LAST_STAGE_INIT
@@ -375,7 +373,6 @@
 /*
  * Commands additional to the ones defined in amcc-common.h
  */
-#define CONFIG_CMD_CHIP_CONFIG
 #define CONFIG_CMD_DTT
 
 #define CONFIG_SYS_POST_MEMORY_ON	CONFIG_SYS_POST_MEMORY
@@ -394,8 +391,6 @@
 
 #define CONFIG_LOGBUFFER
 #define CONFIG_SYS_POST_CACHE_ADDR	0x00800000 /* free virtual address */
-
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
 
 /*-----------------------------------------------------------------------
  * External Bus Controller (EBC) Setup

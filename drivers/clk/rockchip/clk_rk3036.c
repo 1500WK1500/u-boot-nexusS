@@ -19,11 +19,6 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-struct rk3036_clk_priv {
-	struct rk3036_cru *cru;
-	ulong rate;
-};
-
 enum {
 	VCO_MAX_HZ	= 2400U * 1000000,
 	VCO_MIN_HZ	= 600 * 1000000,
@@ -48,23 +43,6 @@ enum {
 /* use interge mode*/
 static const struct pll_div apll_init_cfg = PLL_DIVISORS(APLL_HZ, 1, 3, 1);
 static const struct pll_div gpll_init_cfg = PLL_DIVISORS(GPLL_HZ, 2, 2, 1);
-
-void *rockchip_get_cru(void)
-{
-	struct udevice *dev;
-	fdt_addr_t addr;
-	int ret;
-
-	ret = uclass_get_device(UCLASS_CLK, 0, &dev);
-	if (ret)
-		return ERR_PTR(ret);
-
-	addr = dev_get_addr(dev);
-	if (addr == FDT_ADDR_T_NONE)
-		return ERR_PTR(-EINVAL);
-
-	return (void *)addr;
-}
 
 static int rkclk_set_pll(struct rk3036_cru *cru, enum rk_clk_id clk_id,
 			 const struct pll_div *div)
@@ -250,11 +228,13 @@ static ulong rockchip_mmc_get_clk(struct rk3036_cru *cru, uint clk_general_rate,
 
 	switch (periph) {
 	case HCLK_EMMC:
+	case SCLK_EMMC:
 		con = readl(&cru->cru_clksel_con[12]);
 		mux = (con >> EMMC_PLL_SHIFT) & EMMC_PLL_MASK;
 		div = (con >> EMMC_DIV_SHIFT) & EMMC_DIV_MASK;
 		break;
 	case HCLK_SDIO:
+	case SCLK_SDIO:
 		con = readl(&cru->cru_clksel_con[12]);
 		mux = (con >> MMC0_PLL_SHIFT) & MMC0_PLL_MASK;
 		div = (con >> MMC0_DIV_SHIFT) & MMC0_DIV_MASK;
@@ -287,6 +267,7 @@ static ulong rockchip_mmc_set_clk(struct rk3036_cru *cru, uint clk_general_rate,
 
 	switch (periph) {
 	case HCLK_EMMC:
+	case SCLK_EMMC:
 		rk_clrsetreg(&cru->cru_clksel_con[12],
 			     EMMC_PLL_MASK << EMMC_PLL_SHIFT |
 			     EMMC_DIV_MASK << EMMC_DIV_SHIFT,
@@ -294,6 +275,7 @@ static ulong rockchip_mmc_set_clk(struct rk3036_cru *cru, uint clk_general_rate,
 			     (src_clk_div - 1) << EMMC_DIV_SHIFT);
 		break;
 	case HCLK_SDIO:
+	case SCLK_SDIO:
 		rk_clrsetreg(&cru->cru_clksel_con[11],
 			     MMC0_PLL_MASK << MMC0_PLL_SHIFT |
 			     MMC0_DIV_MASK << MMC0_DIV_SHIFT,
@@ -329,6 +311,7 @@ static ulong rk3036_clk_set_rate(struct clk *clk, ulong rate)
 	case 0 ... 63:
 		return 0;
 	case HCLK_EMMC:
+	case SCLK_EMMC:
 		new_rate = rockchip_mmc_set_clk(priv->cru, gclk_rate,
 						clk->id, rate);
 		break;
@@ -371,7 +354,7 @@ static const struct udevice_id rk3036_clk_ids[] = {
 	{ }
 };
 
-U_BOOT_DRIVER(clk_rk3036) = {
+U_BOOT_DRIVER(rockchip_rk3036_cru) = {
 	.name		= "clk_rk3036",
 	.id		= UCLASS_CLK,
 	.of_match	= rk3036_clk_ids,

@@ -166,7 +166,7 @@ class Popen(subprocess.Popen):
         while read_set or write_set:
             try:
                 rlist, wlist, _ = select.select(read_set, write_set, [], 0.2)
-            except select.error, e:
+            except select.error as e:
                 if e.args[0] == errno.EINTR:
                     continue
                 raise
@@ -190,6 +190,8 @@ class Popen(subprocess.Popen):
                 # We will get an error on read if the pty is closed
                 try:
                     data = os.read(self.stdout.fileno(), 1024)
+                    if isinstance(data, bytes):
+                        data = data.decode('utf-8')
                 except OSError:
                     pass
                 if data == "":
@@ -205,6 +207,8 @@ class Popen(subprocess.Popen):
                 # We will get an error on read if the pty is closed
                 try:
                     data = os.read(self.stderr.fileno(), 1024)
+                    if isinstance(data, bytes):
+                        data = data.decode('utf-8')
                 except OSError:
                     pass
                 if data == "":

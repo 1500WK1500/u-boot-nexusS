@@ -13,10 +13,6 @@
 #include <linux/sizes.h>
 #include <asm/arch/cpu.h>
 
-/*
- * Define DevKit3250 machine type by hand until it lands in mach-types
- */
-#define MACH_TYPE_DEVKIT3250		3697
 #define CONFIG_MACH_TYPE		MACH_TYPE_DEVKIT3250
 
 #define CONFIG_SYS_ICACHE_OFF
@@ -24,7 +20,6 @@
 #if !defined(CONFIG_SPL_BUILD)
 #define CONFIG_SKIP_LOWLEVEL_INIT
 #endif
-#define CONFIG_BOARD_EARLY_INIT_F
 
 /*
  * Memory configurations
@@ -46,7 +41,6 @@
  * Serial Driver
  */
 #define CONFIG_SYS_LPC32XX_UART		5   /* UART5 */
-#define CONFIG_BAUDRATE			115200
 
 /*
  * DMA
@@ -124,7 +118,6 @@
  */
 #define CONFIG_USB_OHCI_LPC32XX
 #define CONFIG_USB_ISP1301_I2C_ADDR		0x2d
-#define CONFIG_USB_STORAGE
 
 /*
  * U-Boot General Configurations
@@ -138,9 +131,6 @@
 
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING
-#define CONFIG_VERSION_VARIABLE
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DOS_PARTITION
 
 /*
  * Pass open firmware flat tree
@@ -195,16 +185,12 @@
 
 /* Use the framework and generic lib */
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_LIBGENERIC_SUPPORT
-#define CONFIG_SPL_LIBCOMMON_SUPPORT
 
 /* SPL will use serial */
-#define CONFIG_SPL_SERIAL_SUPPORT
 
 /* SPL loads an image from NAND */
 #define CONFIG_SPL_NAND_SIMPLE
 #define CONFIG_SPL_NAND_RAW_ONLY
-#define CONFIG_SPL_NAND_SUPPORT
 #define CONFIG_SPL_NAND_DRIVERS
 
 #define CONFIG_SPL_NAND_ECC

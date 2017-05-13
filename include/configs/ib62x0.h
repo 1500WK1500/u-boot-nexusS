@@ -10,11 +10,6 @@
 #define _CONFIG_IB62x0_H
 
 /*
- * Version number information
- */
-#define CONFIG_IDENT_STRING	" RaidSonic ICY BOX IB-NAS62x0"
-
-/*
  * High level configuration options
  */
 #define CONFIG_FEROCEON_88FR131		/* CPU Core subversion */
@@ -33,7 +28,6 @@
 /*
  * Commands configuration
  */
-#define CONFIG_SYS_NO_FLASH		/* declare no flash (NOR/SPI) */
 #define CONFIG_SYS_MVFS
 #define CONFIG_CMD_IDE
 
@@ -97,7 +91,6 @@
 #ifdef CONFIG_CMD_IDE
 #define __io
 #define CONFIG_IDE_PREINIT
-#define CONFIG_DOS_PARTITION
 #define CONFIG_MVSATA_IDE_USE_PORT0
 #define CONFIG_MVSATA_IDE_USE_PORT1
 #define CONFIG_SYS_ATA_IDE0_OFFSET	MV_SATA_PORT0_OFFSET

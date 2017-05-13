@@ -23,7 +23,6 @@
 #define CONFIG_SYS_NS16550_REG_SIZE	1
 #define CONFIG_SYS_NS16550_CLK		get_serial_clock()
 #endif
-#define CONFIG_BAUDRATE		115200
 #define CONFIG_SYS_BAUDRATE_TABLE  \
     {300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400}
 
@@ -52,7 +51,6 @@
  */
 #if defined(CONFIG_440)
 #endif
-#define CONFIG_CMD_DIAG
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IRQ
 #define CONFIG_CMD_REGINFO
@@ -78,8 +76,6 @@
 #define CONFIG_CMDLINE_EDITING		/* add command line history	*/
 #define CONFIG_AUTO_COMPLETE		/* add autocompletion support	*/
 #define CONFIG_MX_CYCLIC		/* enable mdc/mwc commands      */
-#define CONFIG_VERSION_VARIABLE 	/* include version env variable */
-#define CONFIG_SYS_CONSOLE_INFO_QUIET	/* don't print console @ startup*/
 
 #define CONFIG_LOADS_ECHO		/* echo on for serial download	*/
 #define CONFIG_SYS_LOADS_BAUD_CHANGE	/* allow baudrate change	*/

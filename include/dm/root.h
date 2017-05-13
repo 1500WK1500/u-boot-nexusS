@@ -21,6 +21,16 @@ struct udevice;
  */
 struct udevice *dm_root(void);
 
+struct global_data;
+/**
+ * dm_fixup_for_gd_move() - Handle global_data moving to a new place
+ *
+ * The uclass list is part of global_data. Due to the way lists work, moving
+ * the list will cause it to become invalid. This function fixes that up so
+ * that the uclass list will work correctly.
+ */
+void dm_fixup_for_gd_move(struct global_data *new_gd);
+
 /**
  * dm_scan_platdata() - Scan all platform data and bind drivers
  *
@@ -104,5 +114,21 @@ int dm_init(void);
  * @return 0 if OK, -ve on error
  */
 int dm_uninit(void);
+
+#if CONFIG_IS_ENABLED(DM_DEVICE_REMOVE)
+/**
+ * dm_remove_devices_flags - Call remove function of all drivers with
+ *                           specific removal flags set to selectively
+ *                           remove drivers
+ *
+ * All devices with the matching flags set will be removed
+ *
+ * @flags: Flags for selective device removal
+ * @return 0 if OK, -ve on error
+ */
+int dm_remove_devices_flags(uint flags);
+#else
+static inline int dm_remove_devices_flags(uint flags) { return 0; }
+#endif
 
 #endif

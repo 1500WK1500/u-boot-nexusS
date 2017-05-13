@@ -19,15 +19,6 @@
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(32 * SZ_1M)
 
-#define CONFIG_BOARD_EARLY_INIT_F
-#define CONFIG_BOARD_LATE_INIT
-
-#define CONFIG_DISPLAY_BOARDINFO
-
-/* Uncomment to enable secure boot support */
-/* #define CONFIG_SECURE_BOOT */
-#define CONFIG_CSF_SIZE			0x4000
-
 /* Network */
 #define CONFIG_FEC_MXC
 #define CONFIG_MII
@@ -187,8 +178,6 @@
 #define CONFIG_SYS_LOAD_ADDR		CONFIG_LOADADDR
 #define CONFIG_SYS_HZ			1000
 
-#define CONFIG_STACKSIZE		SZ_128K
-
 /* Physical Memory Map */
 #define CONFIG_NR_DRAM_BANKS		1
 #define PHYS_SDRAM			MMDC0_ARB_BASE_ADDR
@@ -202,10 +191,12 @@
 #define CONFIG_SYS_INIT_SP_ADDR \
 	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_SP_OFFSET)
 
-/* FLASH and environment organization */
-#define CONFIG_SYS_NO_FLASH
+/* environment organization */
 #define CONFIG_ENV_SIZE			SZ_8K
 #define CONFIG_ENV_IS_IN_MMC
+
+/* MXC SPI driver support */
+#define CONFIG_MXC_SPI
 
 /*
  * If want to use nand, define CONFIG_NAND_MXS and rework board
@@ -239,7 +230,6 @@
 #define CONFIG_MMCROOT			"/dev/mmcblk0p2"  /* USDHC1 */
 
 /* USB Configs */
-#define CONFIG_USB_STORAGE
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
@@ -253,22 +243,11 @@
 
 #define CONFIG_USB_FUNCTION_MASS_STORAGE
 
-/* USB Device Firmware Update support */
-#define CONFIG_USB_FUNCTION_DFU
-#define CONFIG_DFU_MMC
-#define CONFIG_DFU_RAM
-
-#define CONFIG_VIDEO
 #ifdef CONFIG_VIDEO
-#define CONFIG_CFB_CONSOLE
 #define CONFIG_VIDEO_MXS
 #define CONFIG_VIDEO_LOGO
-#define CONFIG_VIDEO_SW_CURSOR
-#define CONFIG_VGA_AS_SINGLE_DEVICE
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV
 #define CONFIG_SPLASH_SCREEN
 #define CONFIG_SPLASH_SCREEN_ALIGN
-#define CONFIG_CMD_BMP
 #define CONFIG_BMP_16BPP
 #define CONFIG_VIDEO_BMP_RLE8
 #define CONFIG_VIDEO_BMP_LOGO

@@ -11,7 +11,9 @@ ifndef CONFIG_BLK
 obj-y += blk_legacy.o
 endif
 
+obj-$(CONFIG_DWC_AHCI) += dwc_ahci.o
 obj-$(CONFIG_AHCI) += ahci-uclass.o
+obj-$(CONFIG_DM_SCSI) += scsi-uclass.o
 obj-$(CONFIG_SCSI_AHCI) += ahci.o
 obj-$(CONFIG_DWC_AHSATA) += dwc_ahsata.o
 obj-$(CONFIG_FSL_SATA) += fsl_sata.o
@@ -19,7 +21,6 @@ obj-$(CONFIG_IDE_FTIDE020) += ftide020.o
 obj-$(CONFIG_LIBATA) += libata.o
 obj-$(CONFIG_MVSATA_IDE) += mvsata_ide.o
 obj-$(CONFIG_MX51_PATA) += mxc_ata.o
-obj-$(CONFIG_PATA_BFIN) += pata_bfin.o
 obj-$(CONFIG_SATA_CEVA) += sata_ceva.o
 obj-$(CONFIG_SATA_DWC) += sata_dwc.o
 obj-$(CONFIG_SATA_MV) += sata_mv.o

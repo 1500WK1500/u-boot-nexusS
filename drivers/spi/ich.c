@@ -649,10 +649,8 @@ static int ich_spi_child_pre_probe(struct udevice *dev)
 	 * ICH 7 SPI controller only supports array read command
 	 * and byte program command for SST flash
 	 */
-	if (plat->ich_version == ICHV_7) {
-		slave->mode_rx = SPI_RX_SLOW;
-		slave->mode = SPI_TX_BYTE;
-	}
+	if (plat->ich_version == ICHV_7)
+		slave->mode = SPI_RX_SLOW | SPI_TX_BYTE;
 
 	return 0;
 }
@@ -660,14 +658,14 @@ static int ich_spi_child_pre_probe(struct udevice *dev)
 static int ich_spi_ofdata_to_platdata(struct udevice *dev)
 {
 	struct ich_spi_platdata *plat = dev_get_platdata(dev);
+	int node = dev_of_offset(dev);
 	int ret;
 
-	ret = fdt_node_check_compatible(gd->fdt_blob, dev->of_offset,
-					"intel,ich7-spi");
+	ret = fdt_node_check_compatible(gd->fdt_blob, node, "intel,ich7-spi");
 	if (ret == 0) {
 		plat->ich_version = ICHV_7;
 	} else {
-		ret = fdt_node_check_compatible(gd->fdt_blob, dev->of_offset,
+		ret = fdt_node_check_compatible(gd->fdt_blob, node,
 						"intel,ich9-spi");
 		if (ret == 0)
 			plat->ich_version = ICHV_9;

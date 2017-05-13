@@ -18,6 +18,7 @@
 #include <asm/processor.h>
 #include <libfdt.h>
 #include <netdev.h>
+#include <video.h>
 
 #ifdef CONFIG_VIDEO_SM501
 #include <sm501.h>
@@ -127,12 +128,12 @@ static void sdram_start (int hi_addr)
 #endif
 
 /*
- * ATTENTION: Although partially referenced initdram does NOT make real use
+ * ATTENTION: Although partially referenced dram_init does NOT make real use
  *	      use of CONFIG_SYS_SDRAM_BASE. The code does not work if CONFIG_SYS_SDRAM_BASE
  *	      is something else than 0x00000000.
  */
 
-phys_size_t initdram (int board_type)
+int dram_init(void)
 {
 	ulong dramsize = 0;
 	ulong dramsize2 = 0;
@@ -251,10 +252,12 @@ phys_size_t initdram (int board_type)
 	}
 
 #if defined(CONFIG_TQM5200_B)
-	return dramsize + dramsize2;
+	gd->ram_size = dramsize + dramsize2;
 #else
-	return dramsize;
+	gd->ram_size = dramsize;
 #endif /* CONFIG_TQM5200_B */
+
+	return 0;
 }
 
 int checkboard (void)

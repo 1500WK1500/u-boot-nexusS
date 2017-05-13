@@ -15,7 +15,6 @@
 
 #define CONFIG_MPC5200		1	/* This is a MPC5200 CPU */
 #define CONFIG_CANMB		1	/* ... on canmb board - we need this for FEC.C */
-#define CONFIG_DISPLAY_BOARDINFO
 
 /*
  * allowed and functional CONFIG_SYS_TEXT_BASE values:
@@ -34,7 +33,6 @@
  * Serial console configuration
  */
 #define CONFIG_PSC_CONSOLE	1	/* console is on PSC1 */
-#define CONFIG_BAUDRATE		115200	/* ... at 115200 bps */
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200, 230400 }
 
 /*
@@ -48,7 +46,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_IMMAP
 #define CONFIG_CMD_REGINFO
 

@@ -20,9 +20,7 @@
 #define CONFIG_SYS_FORM_PMC	1
 #define CONFIG_440		1
 #define CONFIG_440GX		1		/* 440 GX */
-#define CONFIG_BOARD_EARLY_INIT_F 1		/* Call board_pre_init	*/
 #define CONFIG_SYS_CLK_FREQ	33333333	/* external freq to pll */
-#define CONFIG_DISPLAY_BOARDINFO
 
 #define	CONFIG_SYS_TEXT_BASE	0xFFF80000
 
@@ -103,7 +101,6 @@ extern void out32(unsigned int, unsigned long);
 
 #define CONFIG_SYS_BAUDRATE_TABLE \
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400}
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_LOADS_ECHO		1	/* echo on for serial download */
 #define CONFIG_SYS_LOADS_BAUD_CHANGE	1	/* allow baudrate change */
 
@@ -144,9 +141,7 @@ extern void out32(unsigned int, unsigned long);
  * PCI
  */
 /* General PCI */
-#define CONFIG_PCI				/* include pci support */
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP				/* do pci plug-and-play */
 #define CONFIG_PCI_SCAN_SHOW			/* show pci devices on startup */
 #define CONFIG_SYS_PCI_TARGBASE	0x80000000	/* PCIaddr mapped to CONFIG_SYS_PCI_MEMBASE */
 
@@ -180,7 +175,6 @@ extern void out32(unsigned int, unsigned long);
 /*
  * Command configuration
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_IRQ
 #define CONFIG_CMD_JFFS2

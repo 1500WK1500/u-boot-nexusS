@@ -16,40 +16,25 @@
 #include <configs/ti_omap3_common.h>
 #include <asm/mach-types.h>
 
-/* SRAM starts at 0x40200000 and ends at 0x4020FFFF (64KB) */
-#undef CONFIG_SPL_MAX_SIZE
-#undef CONFIG_SPL_TEXT_BASE
-
-#define CONFIG_SPL_MAX_SIZE		(SRAM_SCRATCH_SPACE_ADDR - CONFIG_SPL_TEXT_BASE)
-#define CONFIG_SPL_TEXT_BASE		0x40200000
-
 /*
- * Display CPU and Board information
+ * We are only ever GP parts and will utilize all of the "downloaded image"
+ * area in SRAM which starts at 0x40200000 and ends at 0x4020FFFF (64KB).
  */
-#define CONFIG_DISPLAY_CPUINFO		1
-#define CONFIG_DISPLAY_BOARDINFO	1
+#undef CONFIG_SPL_TEXT_BASE
+#define CONFIG_SPL_TEXT_BASE		0x40200000
 
 #define CONFIG_MISC_INIT_R
 
 #define CONFIG_REVISION_TAG		1
 
 /* Status LED available for IGEP0020 and IGEP0030 but not IGEP0032 */
-#if (CONFIG_MACH_TYPE != MACH_TYPE_IGEP0032)
-#define CONFIG_STATUS_LED
-#define CONFIG_BOARD_SPECIFIC_LED
-#define CONFIG_GPIO_LED
+#if (CONFIG_MACH_TYPE == MACH_TYPE_IGEP0020) || \
+		       (CONFIG_MACH_TYPE == MACH_TYPE_IGEP0030)
 #if (CONFIG_MACH_TYPE == MACH_TYPE_IGEP0020)
 #define RED_LED_GPIO 27
 #elif (CONFIG_MACH_TYPE == MACH_TYPE_IGEP0030)
 #define RED_LED_GPIO 16
-#else
-#error "status LED not defined for this machine."
 #endif
-#define RED_LED_DEV			0
-#define STATUS_LED_BIT			RED_LED_GPIO
-#define STATUS_LED_STATE		STATUS_LED_ON
-#define STATUS_LED_PERIOD		(CONFIG_SYS_HZ / 2)
-#define STATUS_LED_BOOT			RED_LED_DEV
 #endif
 
 /* GPIO banks */
@@ -65,7 +50,6 @@
 /* USB device configuration */
 #define CONFIG_USB_DEVICE		1
 #define CONFIG_USB_TTY			1
-#define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
 
 /* Change these to suit your needs */
 #define CONFIG_USBD_VENDORID		0x0451
@@ -75,7 +59,6 @@
 
 #define CONFIG_CMD_MTDPARTS
 #define CONFIG_CMD_ONENAND
-#define CONFIG_CMD_UBI
 
 #ifndef CONFIG_SPL_BUILD
 
@@ -116,13 +99,11 @@
 #define CONFIG_SYS_MTDPARTS_RUNTIME
 
 /* OneNAND config */
-#define CONFIG_SPL_ONENAND_SUPPORT
 #define CONFIG_USE_ONENAND_BOARD_INIT
 #define CONFIG_SYS_ONENAND_BASE		ONENAND_MAP
 #define CONFIG_SYS_ONENAND_BLOCK_SIZE	(128*1024)
 
 /* NAND config */
-#define CONFIG_SPL_NAND_SUPPORT
 #define CONFIG_SPL_OMAP3_ID_NAND
 #define CONFIG_SYS_NAND_BUSWIDTH_16BIT
 #define CONFIG_SYS_NAND_5_ADDR_CYCLE
@@ -159,14 +140,12 @@
 #define CONFIG_SPL_UBI_INFO_ADDR	0x88080000
 
 /* environment organization */
-#define CONFIG_ENV_IS_IN_UBI		1
+#define CONFIG_ENV_IS_NOWHERE		1
 #define CONFIG_ENV_UBI_PART		"UBI"
 #define CONFIG_ENV_UBI_VOLUME		"config"
 #define CONFIG_ENV_UBI_VOLUME_REDUND	"config_r"
 #define CONFIG_UBI_SILENCE_MSG		1
 #define CONFIG_UBIFS_SILENCE_MSG	1
 #define CONFIG_ENV_SIZE			(32*1024)
-
-#undef CONFIG_SPL_EXT_SUPPORT
 
 #endif /* __IGEP00X0_H */

@@ -10,9 +10,8 @@
 #include <linux/types.h>
 #include <linux/io.h>
 #include <linux/sizes.h>
-#include <asm/errno.h>
+#include <linux/errno.h>
 #include <dm/device.h>
-#include <dm/root.h>
 #include <i2c.h>
 #include <fdtdec.h>
 

@@ -22,7 +22,7 @@
 #include <spl.h>
 #include <fsl_devdis.h>
 #include <fsl_validate.h>
-
+#include <fsl_ddr.h>
 #include "../common/sleep.h"
 #include "../common/qixis.h"
 #include "ls1021aqds_qixis.h"
@@ -162,9 +162,7 @@ int dram_init(void)
 	 * before accessing DDR SPD.
 	 */
 	select_i2c_ch_pca9547(I2C_MUX_CH_DEFAULT);
-	gd->ram_size = initdram(0);
-
-	return 0;
+	return fsl_initdram();
 }
 
 #ifdef CONFIG_FSL_ESDHC
@@ -430,6 +428,12 @@ int board_init(void)
 	struct ccsr_cci400 *cci = (struct ccsr_cci400 *)CONFIG_SYS_CCI400_ADDR;
 	unsigned int major;
 
+#ifdef CONFIG_SYS_FSL_ERRATUM_A010315
+	erratum_a010315();
+#endif
+#ifdef CONFIG_SYS_FSL_ERRATUM_A009942
+	erratum_a009942_check_cpo();
+#endif
 	major = get_soc_major_rev();
 	if (major == SOC_MAJOR_VER_1_0) {
 		/* Set CCI-400 control override register to
@@ -445,10 +449,6 @@ int board_init(void)
 #endif
 
 	ls102xa_smmu_stream_id_init();
-
-#ifdef CONFIG_LAYERSCAPE_NS_ACCESS
-	enable_layerscape_ns_access();
-#endif
 
 #ifdef CONFIG_U_QE
 	u_qe_init();

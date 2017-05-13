@@ -9,15 +9,6 @@
 #define _TEGRA30_COMMON_H_
 #include "tegra-common.h"
 
-/* Cortex-A9 uses a cache line size of 32 bytes */
-#define CONFIG_SYS_CACHELINE_SIZE	32
-
-/*
- * Errata configuration
- */
-#define CONFIG_ARM_ERRATA_743622
-#define CONFIG_ARM_ERRATA_751472
-
 /*
  * NS16550 Configuration
  */

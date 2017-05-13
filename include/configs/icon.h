@@ -30,7 +30,6 @@
 #define CONFIG_HOSTNAME		icon
 #include "amcc-common.h"
 
-#define CONFIG_BOARD_EARLY_INIT_F	/* Call board_pre_init	*/
 #define CONFIG_BOARD_EARLY_INIT_R	/* Call board_early_init_r */
 
 /*
@@ -126,18 +125,13 @@
 /*
  * Video options
  */
-#define CONFIG_VIDEO
 
 #ifdef CONFIG_VIDEO
 #define CONFIG_VIDEO_SM501
 #define CONFIG_VIDEO_SM501_32BPP
 #define CONFIG_VIDEO_SM501_PCI
 #define VIDEO_FB_LITTLE_ENDIAN
-#define CONFIG_CFB_CONSOLE
 #define CONFIG_VIDEO_LOGO
-#define CONFIG_CONSOLE_EXTRA_INFO
-#define CONFIG_VGA_AS_SINGLE_DEVICE
-#define CONFIG_VIDEO_SW_CURSOR
 #define CONFIG_VIDEO_BMP_RLE8
 #define CONFIG_SPLASH_SCREEN
 #define CFG_CONSOLE_IS_IN_ENV
@@ -165,13 +159,8 @@
 /*
  * Commands additional to the ones defined in amcc-common.h
  */
-#define CONFIG_CMD_CHIP_CONFIG
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_PCI
 #define CONFIG_CMD_SDRAM
-#ifdef CONFIG_VIDEO
-#define CONFIG_CMD_BMP
-#endif
 
 #define	CONFIG_IBM_EMAC4_V4		/* 440SPe has this EMAC version	*/
 #define CONFIG_PHY_ADDR		1	/* PHY address, See schematics	*/
@@ -211,9 +200,7 @@
  * PCI stuff
  */
 /* General PCI */
-#define CONFIG_PCI			/* include pci support		*/
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP			/* do pci plug-and-play		*/
 #define CONFIG_PCI_SCAN_SHOW		/* show pci devices on startup	*/
 #define CONFIG_PCI_CONFIG_HOST_BRIDGE
 #define CONFIG_PCI_BOOTDELAY	1000	/* enable pci bootdelay variable*/
@@ -231,7 +218,6 @@
 #define CONFIG_SYSTEMACE		/* Enable SystemACE support	*/
 #define CONFIG_SYS_SYSTEMACE_WIDTH	16	/* Data bus width is 16	*/
 #define CONFIG_SYS_SYSTEMACE_BASE	CONFIG_SYS_ACE_BASE
-#define CONFIG_DOS_PARTITION
 
 /*
  * External Bus Controller (EBC) Setup

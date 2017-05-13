@@ -28,7 +28,6 @@
 #define CONFIG_HOSTNAME		luan
 #include "amcc-common.h"
 
-#define CONFIG_BOARD_EARLY_INIT_F 1	/* call board_early_init_f()	*/
 #define CONFIG_MISC_INIT_R	1	/* call misc_init_r()		*/
 
 /*-----------------------------------------------------------------------
@@ -159,9 +158,7 @@
 #if defined(CONFIG_CMD_PCI)
 
 /* General PCI */
-#define CONFIG_PCI			/* include pci support	        */
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP			/* do (not) pci plug-and-play   */
 #define CONFIG_PCI_SCAN_SHOW            /* show pci devices on startup  */
 
 /* Board-specific PCI */

@@ -30,7 +30,6 @@
 
 #define CONFIG_SYS_CLK_FREQ	66666667	/* external freq to pll	*/
 
-#define CONFIG_BOARD_EARLY_INIT_F	1	/* Call board_early_init_f */
 #define CONFIG_BOARD_EARLY_INIT_R	1	/* Call board_early_init_r */
 #define CONFIG_MISC_INIT_R		1	/* Call misc_init_r */
 #define CONFIG_BOARD_TYPES		1	/* support board types */
@@ -350,7 +349,6 @@
 /*
  * Commands additional to the ones defined in amcc-common.h
  */
-#define CONFIG_CMD_CHIP_CONFIG
 #define CONFIG_CMD_ECCTEST
 #define CONFIG_CMD_PCI
 #define CONFIG_CMD_SDRAM
@@ -359,9 +357,7 @@
  * PCI stuff
  */
 /* General PCI */
-#define CONFIG_PCI			/* include pci support	        */
 #define CONFIG_PCI_INDIRECT_BRIDGE	/* indirect PCI bridge support */
-#define CONFIG_PCI_PNP			/* do pci plug-and-play   */
 #define CONFIG_PCI_SCAN_SHOW		/* show pci devices on startup  */
 #define CONFIG_PCI_CONFIG_HOST_BRIDGE
 

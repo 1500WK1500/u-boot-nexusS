@@ -17,13 +17,11 @@
  * Include common defines/options for all AMCC eval boards
  */
 #define CONFIG_HOSTNAME		iocon
-#define CONFIG_IDENT_STRING	" iocon 0.06"
 #include "amcc-common.h"
 
 /* Reclaim some space. */
 #undef CONFIG_SYS_LONGHELP
 
-#define CONFIG_BOARD_EARLY_INIT_F
 #define CONFIG_BOARD_EARLY_INIT_R
 #define CONFIG_LAST_STAGE_INIT
 

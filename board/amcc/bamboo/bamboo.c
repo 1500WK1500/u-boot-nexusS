@@ -12,6 +12,8 @@
 #include <asm/ppc440.h>
 #include "bamboo.h"
 
+DECLARE_GLOBAL_DATA_PTR;
+
 void ext_bus_cntlr_init(void);
 void configure_ppc440ep_pins(void);
 int is_nand_selected(void);
@@ -436,13 +438,11 @@ int checkboard(void)
 }
 
 
-phys_size_t initdram (int board_type)
+int dram_init(void)
 {
-	long dram_size;
+	gd->ram_size = spd_sdram();
 
-	dram_size = spd_sdram();
-
-	return dram_size;
+	return 0;
 }
 
 /*----------------------------------------------------------------------------+

@@ -10,7 +10,7 @@
 #include <asm/arch/imx-regs.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/mx6-pins.h>
-#include <asm/errno.h>
+#include <linux/errno.h>
 #include <asm/gpio.h>
 #include <asm/imx-common/mxc_i2c.h>
 #include <asm/imx-common/iomux-v3.h>
@@ -604,6 +604,8 @@ static void spl_dram_init(void)
 		.sde_to_rst = 0x10,	/* 14 cycles, 200us (JEDEC default) */
 		.rst_to_cke = 0x23,	/* 33 cycles, 500us (JEDEC default) */
 		.ddr_type = DDR_TYPE_DDR3,
+		.refsel = 1,	/* Refresh cycles at 32KHz */
+		.refr = 7,	/* 8 refresh commands per refresh cycle */
 	};
 
 	mx6dq_dram_iocfg(64, &mx6_ddr_ioregs, &mx6_grp_ioregs);

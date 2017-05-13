@@ -25,8 +25,6 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_DISPLAY_BOARDINFO
-
 #define CPU_CLOCK_RATE			324000000 /* Clock for the MIPS core */
 #define CONFIG_SYS_MIPS_TIMER_FREQ	(CPU_CLOCK_RATE / 2)
 
@@ -40,8 +38,6 @@
 
 #if !defined(CONFIG_VCT_NAND) && !defined(CONFIG_VCT_ONENAND)
 #define CONFIG_VCT_NOR
-#else
-#define CONFIG_SYS_NO_FLASH
 #endif
 
 /*
@@ -58,7 +54,6 @@
 #define CONFIG_SYS_NS16550_COM1		UART_1_BASE
 #define CONFIG_CONS_INDEX		1
 #define CONFIG_SYS_NS16550_CLK		921600
-#define CONFIG_BAUDRATE			115200
 
 /*
  * SDRAM
@@ -99,10 +94,6 @@
 #endif
 
 #if defined(CONFIG_CMD_USB)
-#define CONFIG_USB_STORAGE
-#define CONFIG_DOS_PARTITION
-#define CONFIG_ISO_PARTITION
-
 #define CONFIG_SUPPORT_VFAT
 
 /*
@@ -143,7 +134,6 @@
 #define CONFIG_SYS_MAXARGS	16		/* max number of command args	*/
 #define CONFIG_TIMESTAMP			/* Print image info with timestamp */
 #define CONFIG_CMDLINE_EDITING			/* add command line history	*/
-#define CONFIG_SYS_CONSOLE_INFO_QUIET		/* don't print console @ startup*/
 
 /*
  * FLASH and environment organization
@@ -247,7 +237,6 @@ int vct_gpio_get(int pin);
 #if defined(CONFIG_VCT_ONENAND)
 #define CONFIG_SYS_USE_UBI
 #define	CONFIG_CMD_JFFS2
-#define	CONFIG_CMD_UBI
 #define	CONFIG_RBTREE
 #define CONFIG_MTD_DEVICE		/* needed for mtdparts commands */
 #define CONFIG_MTD_PARTITIONS
@@ -266,7 +255,6 @@ int vct_gpio_get(int pin);
  * (NOR/OneNAND) usage and Linux kernel booting.
  */
 #if defined(CONFIG_VCT_SMALL_IMAGE)
-#undef CONFIG_CMD_BEDBUG
 #undef CONFIG_CMD_EEPROM
 #undef CONFIG_CMD_EEPROM
 #undef CONFIG_CMD_IRQ
