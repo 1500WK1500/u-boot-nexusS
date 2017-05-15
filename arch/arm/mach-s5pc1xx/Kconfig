@@ -9,7 +9,7 @@ config TARGET_S5P_GONI
 	select OF_CONTROL
 
 config TARGET_S5P_NEXUSS
-        bool "S5P Goni board"
+        bool "S5P Herring board"
         select OF_CONTROL
 
 config TARGET_SMDKC100
